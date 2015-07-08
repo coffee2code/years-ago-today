@@ -1,0 +1,70 @@
+# Translation of the WordPress plugin Years Ago Today v1.0 by Scott Reilly.
+# Copyright (C) 2015 Scott Reilly
+# This file is distributed under the same license as the Years Ago Today plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: Years Ago Today 1.0\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/years-ago-today\n"
+"POT-Creation-Date: 2015-07-08 05:34:44+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2015-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+
+#: years-ago-today.php:197
+msgid "No posts were published to the site %s on this day from any past year."
+msgstr ""
+
+#: years-ago-today.php:204
+msgid ""
+"The following post(s) have been published to the site %s on this day in "
+"previous years:"
+msgstr ""
+
+#: years-ago-today.php:223
+msgid "[%s] Years Ago Today daily update"
+msgstr ""
+
+#. #-#-#-#-#  years-ago-today.pot (Years Ago Today 1.0)  #-#-#-#-#
+#. Plugin Name of the plugin/theme
+#: years-ago-today.php:243
+msgid "Years Ago Today"
+msgstr ""
+
+#: years-ago-today.php:259
+msgid ""
+"The following post(s) have been published to the site on this day in "
+"previous years:"
+msgstr ""
+
+#: years-ago-today.php:274
+msgid "No posts were published on this day from any past year."
+msgstr ""
+
+#: years-ago-today.php:397
+msgid "\"Years Ago Today\" email"
+msgstr ""
+
+#: years-ago-today.php:401
+msgid "Email me daily about posts published on this day in years past."
+msgstr ""
+
+#. Plugin URI of the plugin/theme
+msgid "http://coffee2code.com/wp-plugins/years-ago-today/"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid ""
+"Admin dashboard widget (and optional daily email) that lists posts published "
+"to your site on this day in years past."
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "Scott Reilly"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "http://coffee2code.com/"
+msgstr ""
