@@ -5,8 +5,8 @@ Tags: dashboard, admin dashboard, on this day, past posts, history, dashboard wi
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Requires at least: 4.1
-Tested up to: 4.2
-Stable tag: 1.0
+Tested up to: 4.3
+Stable tag: 1.0.1
 
 Admin dashboard widget (and optional daily email) that lists posts published to your site on this day in years past.
 
@@ -56,11 +56,20 @@ The cron system for WordPress (which handles scheduled events, such as the sched
 
 == Changelog ==
 
+= 1.0.1 (2015-08-03) =
+* Bugfix: Change default value for 'c2c_years_ago_today-email-if-no-posts' filter from true to false. The original intent was by default not to send the email on days without past posts.
+* Bugfix: Load language files from the 'lang' sub-directory.
+* Change: Use `dirname(__FILE__)` instead of `__DIR__` since the latter is only available on PHP 5.3+
+* Update: Note compatibility through WP 4.3+
+
 = 1.0 =
 * Initial public release
 
 
 == Upgrade Notice ==
+
+= 1.0.1 =
+Minor bugfixes: Default to not sending email on days without past posts, as originally intended; locate lang files in proper sub-directory; noted compatibility through WP 4.3+
 
 = 1.0 =
 Initial public release.

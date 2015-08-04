@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Years Ago Today
- * Version:     1.0
+ * Version:     1.0.1
  * Plugin URI:  http://coffee2code.com/wp-plugins/years-ago-today/
  * Author:      Scott Reilly
  * Author URI:  http://coffee2code.com/
@@ -11,7 +11,7 @@
  * License URI: http://www.gnu.org/licenses/gpl-2.0.html
  * Description: Admin dashboard widget (and optional daily email) that lists posts published to your site on this day in years past.
  *
- * Compatible with WordPress 4.1 (and probably earlier) through 4.2+.
+ * Compatible with WordPress 4.1 (and probably earlier) through 4.3+.
  *
  * =>> Read the accompanying readme.txt file for instructions and documentation.
  * =>> Also, visit the plugin's homepage for additional information and updates.
@@ -19,7 +19,7 @@
  *
  * @package Years_Ago_Today
  * @author  Scott Reilly
- * @version 1.0
+ * @version 1.0.1
  */
 
 /*
@@ -87,7 +87,7 @@ class c2c_YearsAgoToday {
 	 * @since 1.0
 	 */
 	public static function version() {
-		return '1.0';
+		return '1.0.1';
 	}
 
 	/**
@@ -109,7 +109,7 @@ class c2c_YearsAgoToday {
 	 */
 	public static function do_init() {
 		// Load textdomain.
-		load_plugin_textdomain( 'years-ago-today', false, basename( __DIR__ ) );
+		load_plugin_textdomain( 'years-ago-today', false, basename( dirname( __FILE__ ) ) . DIRECTORY_SEPARATOR . 'lang' );
 
 		// Register hooks.
 		add_action( 'wp_dashboard_setup',       array( __CLASS__, 'dashboard_setup' ) );
@@ -188,7 +188,7 @@ class c2c_YearsAgoToday {
 		$query = self::get_posts();
 
 		// If there were no posts, check a filter to see if an email shouldn't be sent.
-		if ( ! $query->have_posts() && ! apply_filters( 'c2c_years_ago_today-email-if-no-posts', true ) ) {
+		if ( ! $query->have_posts() && ! apply_filters( 'c2c_years_ago_today-email-if-no-posts', false ) ) {
 			return;
 		}  elseif ( ! $query->have_posts() ) {
 			$body = apply_filters(

@@ -2,8 +2,6 @@
 
 class Years_Ago_Today_Test extends WP_UnitTestCase {
 
-
-
 	/*
 	 * HELPER FUNCTIONS
 	 */
@@ -34,7 +32,7 @@ class Years_Ago_Today_Test extends WP_UnitTestCase {
 
 
 	function test_plugin_version() {
-		$this->assertEquals( '1.0', c2c_YearsAgoToday::version() );
+		$this->assertEquals( '1.0.1', c2c_YearsAgoToday::version() );
 	}
 
 	function test_class_is_available() {
