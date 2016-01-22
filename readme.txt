@@ -5,8 +5,8 @@ Tags: dashboard, admin dashboard, on this day, past posts, history, dashboard wi
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Requires at least: 4.1
-Tested up to: 4.3
-Stable tag: 1.0.1
+Tested up to: 4.4
+Stable tag: 1.1
 
 Admin dashboard widget (and optional daily email) that lists posts published to your site on this day in years past.
 
@@ -56,6 +56,19 @@ The cron system for WordPress (which handles scheduled events, such as the sched
 
 == Changelog ==
 
+= 1.1 (2016-01-21) =
+* Bugfix: Fix for bug when posts across two days were returned for today by using site's time and not GMT.
+* New: Add filter 'c2c_years_ago_ago-email_cron_time'.
+* Change: Change incorrectly named filter from 'c2c_years_ago_ago-first_published_year' to 'c2c_years_ago_today-first_published_year'.
+* Change: Add support for language packs:
+    * Don't load textdomain from file.
+    * Remove .pot file and /lang subdirectory.
+    * Fix an incorrectly defined textdomain.
+* Change: Note compatibility through WP 4.4+.
+* Change: Explicitly declare methods in unit tests as public.
+* Change: Update copyright date (2016).
+* New: Create empty index.php to prevent files from being listed if web server has enabled directory listings.
+
 = 1.0.1 (2015-08-03) =
 * Bugfix: Change default value for 'c2c_years_ago_today-email-if-no-posts' filter from true to false. The original intent was by default not to send the email on days without past posts.
 * Bugfix: Load language files from the 'lang' sub-directory.
@@ -67,6 +80,9 @@ The cron system for WordPress (which handles scheduled events, such as the sched
 
 
 == Upgrade Notice ==
+
+= 1.1 =
+Recommended update: bugfix for posts published the day after past todays sometimes being included; adjustments to utilize language packs; minor unit test tweaks; noted compatibility through WP 4.4+; and updated copyright date
 
 = 1.0.1 =
 Minor bugfixes: Default to not sending email on days without past posts, as originally intended; locate lang files in proper sub-directory; noted compatibility through WP 4.3+

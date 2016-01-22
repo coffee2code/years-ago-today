@@ -1,11 +1,12 @@
 <?php
 
+defined( 'ABSPATH' ) or die();
+
 class Years_Ago_Today_Test extends WP_UnitTestCase {
 
-	/*
-	 * HELPER FUNCTIONS
-	 */
-
+	//
+	// HELPER FUNCTIONS
+	//
 
 
 	private function get_date( $year = null, $today = true ) {
@@ -24,28 +25,26 @@ class Years_Ago_Today_Test extends WP_UnitTestCase {
 	}
 
 
-
-	/*
-	 * TESTS
-	 */
-
+	//
+	// TESTS
+	//
 
 
-	function test_plugin_version() {
-		$this->assertEquals( '1.0.1', c2c_YearsAgoToday::version() );
+	public function test_plugin_version() {
+		$this->assertEquals( '1.1', c2c_YearsAgoToday::version() );
 	}
 
-	function test_class_is_available() {
+	public function test_class_is_available() {
 		$this->assertTrue( class_exists( 'c2c_YearsAgoToday' ) );
 	}
 
-	function test_cron_task_is_created() {
+	public function test_cron_task_is_created() {
 		c2c_YearsAgoToday::activate();
 
 		$this->assertNotFalse( wp_next_scheduled( c2c_YearsAgoToday::$cron_name ) );
 	}
 
-	function test_shows_message_about_no_previous_year_posts() {
+	public function test_shows_message_about_no_previous_year_posts() {
 		ob_start();
 		c2c_YearsAgoToday::wp_dashboard_years_ago_today();
 		$out = ob_get_contents();
@@ -54,13 +53,13 @@ class Years_Ago_Today_Test extends WP_UnitTestCase {
 		$this->assertContains( 'No posts were published on this day from any past year.', $out );
 	}
 
-	function test_get_posts_query_obj_with_no_matching_past_year_posts() {
+	public function test_get_posts_query_obj_with_no_matching_past_year_posts() {
 		$this->factory->post->create( array( 'post_date' => $this->get_date( '2012', false ) ) );
 
 		$this->assertFalse( c2c_YearsAgoToday::get_posts()->have_posts() );
 	}
 
-	function test_get_posts_query_obj_with_matching_past_year_posts() {
+	public function test_get_posts_query_obj_with_matching_past_year_posts() {
 		$post_id = $this->factory->post->create( array( 'post_date' => $this->get_date( '2012' ) ) );
 
 		$query = c2c_YearsAgoToday::get_posts();
@@ -70,13 +69,13 @@ class Years_Ago_Today_Test extends WP_UnitTestCase {
 		$this->assertEquals( array( get_post( $post_id ) ), $query->get_posts() );
 	}
 
-	function test_get_posts_with_no_matching_past_year_posts() {
+	public function test_get_posts_with_no_matching_past_year_posts() {
 		$this->factory->post->create( array( 'post_date' => $this->get_date( '2012', false ) ) );
 
 		$this->assertEmpty( c2c_YearsAgoToday::get_posts( true ) );
 	}
 
-	function test_get_posts_with_matching_past_year_posts() {
+	public function test_get_posts_with_matching_past_year_posts() {
 		$post_id = $this->factory->post->create( array( 'post_date' => $this->get_date( '2012' ) ) );
 
 		$posts = c2c_YearsAgoToday::get_posts( true );
@@ -86,7 +85,7 @@ class Years_Ago_Today_Test extends WP_UnitTestCase {
 		$this->assertEquals( get_post( $post_id ), $posts[0] );
 	}
 
-	function test_get_users_to_email_with_no_users() {
+	public function test_get_users_to_email_with_no_users() {
 		$user1_id = $this->factory->user->create();
 		$user2_id = $this->factory->user->create();
 		$user3_id = $this->factory->user->create();
@@ -94,7 +93,7 @@ class Years_Ago_Today_Test extends WP_UnitTestCase {
 		$this->assertEmpty( c2c_YearsAgoToday::get_users_to_email() );
 	}
 
-	function test_get_users_to_email_with_users() {
+	public function test_get_users_to_email_with_users() {
 		$user1_id = $this->factory->user->create();
 		$user2_id = $this->factory->user->create();
 		$user3_id = $this->factory->user->create();
@@ -108,11 +107,11 @@ class Years_Ago_Today_Test extends WP_UnitTestCase {
 		$this->assertEquals( array( $user1, $user3 ), c2c_YearsAgoToday::get_users_to_email() );
 	}
 
-	function test_get_first_published_year_with_no_posts() {
+	public function test_get_first_published_year_with_no_posts() {
 		$this->assertEquals( current_time( 'Y' ), c2c_YearsAgoToday::get_first_published_year() );
 	}
 
-	function test_get_first_published_year_with_posts() {
+	public function test_get_first_published_year_with_posts() {
 		$post1_id = $this->factory->post->create( array( 'post_date' => $this->get_date( '2014' ) ) );
 		$post2_id = $this->factory->post->create( array( 'post_date' => $this->get_date( '2013' ) ) );
 		$post3_id = $this->factory->post->create( array( 'post_date' => $this->get_date( '2011' ) ) );

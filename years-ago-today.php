@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Years Ago Today
- * Version:     1.0.1
+ * Version:     1.1
  * Plugin URI:  http://coffee2code.com/wp-plugins/years-ago-today/
  * Author:      Scott Reilly
  * Author URI:  http://coffee2code.com/
@@ -11,7 +11,7 @@
  * License URI: http://www.gnu.org/licenses/gpl-2.0.html
  * Description: Admin dashboard widget (and optional daily email) that lists posts published to your site on this day in years past.
  *
- * Compatible with WordPress 4.1 (and probably earlier) through 4.3+.
+ * Compatible with WordPress 4.1 (and probably earlier) through 4.4+.
  *
  * =>> Read the accompanying readme.txt file for instructions and documentation.
  * =>> Also, visit the plugin's homepage for additional information and updates.
@@ -19,7 +19,7 @@
  *
  * @package Years_Ago_Today
  * @author  Scott Reilly
- * @version 1.0.1
+ * @version 1.1
  */
 
 /*
@@ -32,7 +32,7 @@
  */
 
 /*
-	Copyright (c) 2015 by Scott Reilly (aka coffee2code)
+	Copyright (c) 2015-2016 by Scott Reilly (aka coffee2code)
 
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
@@ -87,7 +87,7 @@ class c2c_YearsAgoToday {
 	 * @since 1.0
 	 */
 	public static function version() {
-		return '1.0.1';
+		return '1.1';
 	}
 
 	/**
@@ -109,10 +109,14 @@ class c2c_YearsAgoToday {
 	 */
 	public static function do_init() {
 		// Load textdomain.
-		load_plugin_textdomain( 'years-ago-today', false, basename( dirname( __FILE__ ) ) . DIRECTORY_SEPARATOR . 'lang' );
+		load_plugin_textdomain( 'years-ago-today' );
 
-		// Register hooks.
+		/* Register hooks. */
+
+		// Register dashboard widget.
 		add_action( 'wp_dashboard_setup',       array( __CLASS__, 'dashboard_setup' ) );
+
+		// Modify posts query for year ago searches.
 		add_action( 'posts_where',              array( __CLASS__, 'add_year_clause_to_query' ), 10, 2 );
 
 		// Adds the checkbox to user profiles.
@@ -136,7 +140,7 @@ class c2c_YearsAgoToday {
 	public static function activate() {
 		if ( ! wp_next_scheduled( self::$cron_name ) ) {
 			// Schedule the sending of the emails.
-			$time = '9:00 am';
+			$time = apply_filters( 'c2c_years_ago_today-email_cron_time', '9:00 am' );
 			$timestamp = ( strtotime( $time ) > time() ) ? strtotime( $time ) : strtotime( 'tomorrow ' . $time );
 
 			wp_schedule_event( $timestamp, 'daily', self::$cron_name );
@@ -256,7 +260,7 @@ class c2c_YearsAgoToday {
 		$q = self::get_posts();
 
 		if ( $q->have_posts() ) :
-			echo '<p>' . __( 'The following post(s) have been published to the site on this day in previous years:', 'wporg' ) . '</p>';
+			echo '<p>' . __( 'The following post(s) have been published to the site on this day in previous years:', 'years-ago-today' ) . '</p>';
 			echo '<ul class="years-ago-today-posts">';
 			$year = '';
 			while ( $q->have_posts() ) : $q->the_post();
@@ -278,7 +282,7 @@ class c2c_YearsAgoToday {
 	}
 
 	/**
-	 * Adjusts WHERE clause to include date range when find years ago posts.
+	 * Adjusts WHERE clause to include date range to find years ago posts.
 	 *
 	 * @since 1.0
 	 *
@@ -292,10 +296,10 @@ class c2c_YearsAgoToday {
 		if ( isset( $query->query_vars['is_years_ago_today'] ) && '1' == $query->query_vars['is_years_ago_today'] ) {
 
 			$first_year = self::get_first_published_year();
-			$current_year = mysql2date( 'Y', current_time( 'mysql', 1 ) );
+			$current_year = mysql2date( 'Y', current_time( 'mysql' ) );
 
 			$years = range( $first_year, $current_year - 1 );
-			$now   = current_time( 'timestamp', 1 );
+			$now   = current_time( 'timestamp' );
 			$month = mysql2date( 'm', $now );
 			$day   = mysql2date( 'd', $now );
 
@@ -328,7 +332,7 @@ class c2c_YearsAgoToday {
 		global $wpdb;
 
 		// Allow a year to be provided via a filter.
-		$first_year = apply_filters( 'c2c_years_ago_ago-first_published_year', false );
+		$first_year = apply_filters( 'c2c_years_ago_today-first_published_year', false );
 
 		// If not provided via filter, try to get it from the cache.
 		if ( false === $first_year ) {
