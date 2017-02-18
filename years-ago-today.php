@@ -219,7 +219,8 @@ class c2c_YearsAgoToday {
 			);
 
 			$year = '';
-			while ( $query->have_posts() ) : $query->the_post();
+			while ( $query->have_posts() ) :
+				$query->the_post();
 				$this_year = get_the_date( 'Y' );
 				// Only output the year once.
 				if ( $year != $this_year ) {
@@ -282,7 +283,8 @@ class c2c_YearsAgoToday {
 			echo '</p>';
 			echo '<ul class="years-ago-today-posts">';
 			$year = '';
-			while ( $q->have_posts() ) : $q->the_post();
+			while ( $q->have_posts() ) :
+				$q->the_post();
 				$this_year = get_the_date( 'Y' );
 				// Only output the year once.
 				if ( $year != $this_year ) {
