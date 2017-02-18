@@ -59,6 +59,7 @@ The cron system for WordPress (which handles scheduled events, such as the sched
 = () =
 * Change: Update unit test bootstrap
     * Default `WP_TESTS_DIR` to `/tmp/wordpress-tests-lib` rather than erroring out if not defined via environment variable
+    * Enable more error output for unit tests
 
 = 1.1 (2016-01-21) =
 * Bugfix: Fix for bug when posts across two days were returned for today by using site's time and not GMT.
