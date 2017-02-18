@@ -53,6 +53,29 @@ class Years_Ago_Today_Test extends WP_UnitTestCase {
 		$this->assertContains( 'No posts were published on this day from any past year.', $out );
 	}
 
+	public function test_shows_singular_message_with_single_matching_past_year_posts() {
+		$this->factory->post->create( array( 'post_date' => $this->get_date( '2012' ) ) );
+
+		ob_start();
+		c2c_YearsAgoToday::wp_dashboard_years_ago_today();
+		$out = ob_get_contents();
+		ob_end_clean();
+
+		$this->assertContains( 'The following post has been published to the site on this day in a previous year:', $out );
+	}
+
+	public function test_shows_plural_message_with_multiple_matching_past_year_posts() {
+		$this->factory->post->create( array( 'post_date' => $this->get_date( '2012' ) ) );
+		$this->factory->post->create( array( 'post_date' => $this->get_date( '2014' ) ) );
+
+		ob_start();
+		c2c_YearsAgoToday::wp_dashboard_years_ago_today();
+		$out = ob_get_contents();
+		ob_end_clean();
+
+		$this->assertContains( 'The following posts have been published to the site on this day in previous years:', $out );
+	}
+
 	public function test_get_posts_query_obj_with_no_matching_past_year_posts() {
 		$this->factory->post->create( array( 'post_date' => $this->get_date( '2012', false ) ) );
 

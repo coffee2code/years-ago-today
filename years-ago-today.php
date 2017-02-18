@@ -205,7 +205,11 @@ class c2c_YearsAgoToday {
 		} else {
 			// Build out email body.
 			$body = sprintf(
-				__( 'The following post(s) have been published to the site %s on this day in previous years:', 'wporg' ),
+				$query->post_count > 1
+					/* translators: %s: the name of the site */
+					? __( 'The following posts have been published to the site %s on this day in previous years:', 'years-ago-today' )
+					/* translators: %s: the name of the site */
+					: __( 'The following post has been published to the site %s on this day in a previous year:', 'years-ago-today' ),
 				wp_specialchars_decode( get_option('blogname'), ENT_QUOTES )
 			);
 
@@ -260,7 +264,13 @@ class c2c_YearsAgoToday {
 		$q = self::get_posts();
 
 		if ( $q->have_posts() ) :
-			echo '<p>' . __( 'The following post(s) have been published to the site on this day in previous years:', 'years-ago-today' ) . '</p>';
+			echo '<p>';
+			$q->post_count > 1
+				/* translators: %s: the name of the site */
+				? _e( 'The following posts have been published to the site on this day in previous years:', 'years-ago-today' )
+				/* translators: %s: the name of the site */
+				: _e( 'The following post has been published to the site on this day in a previous year:', 'years-ago-today' );
+			echo '</p>';
 			echo '<ul class="years-ago-today-posts">';
 			$year = '';
 			while ( $q->have_posts() ) : $q->the_post();
