@@ -234,6 +234,7 @@ class c2c_YearsAgoToday {
 
 		// Build subject.
 		$subject = sprintf(
+			/* translators: %s: site name in subject for daily email */
 			__( '[%s] Years Ago Today daily update', 'years-ago-today' ),
 			wp_specialchars_decode( get_option('blogname'), ENT_QUOTES )
 		);
@@ -298,6 +299,7 @@ class c2c_YearsAgoToday {
 		else :
 			echo '<p>';
 			printf(
+				/* translators: %s: date string for today */
 				__( 'No posts were published on <strong>%s</strong> from any past year.', 'years-ago-today' ),
 				/* translators: date string for today */
 				date_i18n( __( 'M jS' ), current_time( 'timestamp' ) )
