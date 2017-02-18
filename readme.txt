@@ -57,6 +57,9 @@ The cron system for WordPress (which handles scheduled events, such as the sched
 == Changelog ==
 
 = () =
+* New: Add `get_email_subject()` for getting email subject
+* New: Add `get_email_body()` for getting email body
+* Change: Split out functionality from `cron_email()` into the two aforementioned functions and bail if either return empty string
 * Change: Use separate singular and plural strings in the widget and email in the text preceding the list of posts
 * Change: Include month and day of the month in widget and email text instead of saying "this day"
 * Change: Update unit test bootstrap

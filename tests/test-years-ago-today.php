@@ -4,6 +4,13 @@ defined( 'ABSPATH' ) or die();
 
 class Years_Ago_Today_Test extends WP_UnitTestCase {
 
+	public function tearDown() {
+		parent::tearDown();
+
+		remove_filter( 'c2c_years_ago_today-email-if-no-posts', '__return_true' );
+	}
+
+
 	//
 	// HELPER FUNCTIONS
 	//
@@ -142,6 +149,89 @@ class Years_Ago_Today_Test extends WP_UnitTestCase {
 		$post5_id = $this->factory->post->create( array( 'post_date' => $this->get_date( '2013', false ) ) );
 
 		$this->assertEquals( '2011', c2c_YearsAgoToday::get_first_published_year() );
+	}
+
+	/*
+	 * get_email_subject()
+	 */
+
+	public function test_get_email_subject() {
+		$this->assertEquals(
+			'[Test Blog] Years Ago Today daily update',
+			c2c_YearsAgoToday::get_email_subject()
+		);
+	}
+
+	/*
+	 * get_email_body()
+	 */
+
+	public function test_get_email_body_with_no_posts() {
+		$this->assertEmpty( c2c_YearsAgoToday::get_email_body() );
+	}
+
+	public function test_get_email_body_with_no_posts_but_email_forced() {
+		add_filter( 'c2c_years_ago_today-email-if-no-posts', '__return_true' );
+
+		$this->assertEquals(
+			sprintf(
+				'No posts were published to the site %1$s on <strong>%2$s</strong> in any past year.',
+				'Test Blog',
+				current_time( 'M jS' )
+			),
+			c2c_YearsAgoToday::get_email_body()
+		);
+	}
+
+	public function test_get_email_body_shows_singular_message_with_single_matching_past_year_posts() {
+		$this->factory->post->create( array( 'post_date' => $this->get_date( '2012' ) ) );
+
+		$this->assertContains(
+			'The following post has been published to the site Test Blog on <strong>' . current_time( 'M jS' ) . '</strong> in a previous year:',
+			c2c_YearsAgoToday::get_email_body()
+		);
+	}
+
+	public function test_get_email_body_whole_email_with_single_matching_past_year_posts() {
+		$post_title = 'A blast from the past';
+		$post = $this->factory->post->create( array( 'post_title' => $post_title, 'post_date' => $this->get_date( '2012' ) ) );
+
+		$email  = 'The following post has been published to the site Test Blog on <strong>' . current_time( 'M jS' ) . '</strong> in a previous year:';
+		$email .= "\n\n== 2012 ==\n";
+		$email .= "* {$post_title} : " . get_permalink( $post ) . "\n";
+
+		$this->assertEquals(
+			$email,
+			c2c_YearsAgoToday::get_email_body()
+		);
+	}
+
+	public function test_get_email_body_shows_plural_message_with_multiple_matching_past_year_posts() {
+		$this->factory->post->create( array( 'post_date' => $this->get_date( '2012' ) ) );
+		$this->factory->post->create( array( 'post_date' => $this->get_date( '2014' ) ) );
+
+		$this->assertContains(
+			'The following posts have been published to the site Test Blog on <strong>' . current_time( 'M jS' ) . '</strong> in previous years:',
+			c2c_YearsAgoToday::get_email_body()
+		);
+	}
+
+	public function test_get_email_body_whole_email_with_multiple_matching_past_year_posts() {
+		$post_title1 = 'A blast from the past';
+		$post1 = $this->factory->post->create( array( 'post_title' => $post_title1, 'post_date' => $this->get_date( '2012' ) ) );
+		$post_title2 = 'Days of future years past';
+		$post2 = $this->factory->post->create( array( 'post_title' => $post_title2, 'post_date' => $this->get_date( '2014' ) ) );
+
+		$email  = 'The following posts have been published to the site Test Blog on <strong>' . current_time( 'M jS' ) . '</strong> in previous years:';
+		$email .= "\n\n== 2014 ==\n";
+		$email .= "* {$post_title2} : " . get_permalink( $post2 ) . "\n";
+		$email .= "\n\n== 2012 ==\n";
+		$email .= "* {$post_title1} : " . get_permalink( $post1 ) . "\n";
+
+		$this->assertEquals(
+			$email,
+			c2c_YearsAgoToday::get_email_body()
+		);
 	}
 
 }

@@ -175,19 +175,13 @@ class c2c_YearsAgoToday {
 	}
 
 	/**
-	 * Sends out daily email.
+	 * Returns the body of the daily email.
 	 *
-	 * @since 1.0
+	 * @since 1.2
+	 *
+	 * @return string
 	 */
-	public static function cron_email() {
-		// Get list of users who want the daily email.
-		$users = self::get_users_to_email();
-
-		// If no one wants the email, there's nothing else to do.
-		if ( ! $users ) {
-			return;
-		}
-
+	public static function get_email_body() {
 		// Get the list of posts from years ago.
 		$query = self::get_posts();
 
@@ -232,12 +226,47 @@ class c2c_YearsAgoToday {
 			endwhile;
 		}
 
-		// Build subject.
-		$subject = sprintf(
+		return $body;
+	}
+
+	/**
+	 * Returns the subject line for the daily email.
+	 *
+	 * @since 1.2
+	 *
+	 * @return string
+	 */
+	public static function get_email_subject() {
+		return sprintf(
 			/* translators: %s: site name in subject for daily email */
 			__( '[%s] Years Ago Today daily update', 'years-ago-today' ),
 			wp_specialchars_decode( get_option('blogname'), ENT_QUOTES )
 		);
+	}
+
+	/**
+	 * Sends out daily email.
+	 *
+	 * @since 1.0
+	 * @todo  Handle large volume of users better, perhaps via chunked BCCs.
+	 */
+	public static function cron_email() {
+		// Get list of users who want the daily email.
+		$users = self::get_users_to_email();
+
+		// If no one wants the email, there's nothing else to do.
+		if ( ! $users ) {
+			return;
+		}
+
+		// Get the content of the email.
+		$subject = self::get_email_subject();
+		$body    = self::get_email_body();
+
+		// If no subject or body for the email, then there's nothing else to do.
+		if ( ! $subject || ! $body ) {
+			return;
+		}
 
 		// Send email to each user.
 		foreach ( $users as $user ) {
