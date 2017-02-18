@@ -58,6 +58,7 @@ The cron system for WordPress (which handles scheduled events, such as the sched
 
 = () =
 * Change: Use separate singular and plural strings in the widget and email in the text preceding the list of posts
+* Change: Include month and day of the month in widget and email text instead of saying "this day"
 * Change: Update unit test bootstrap
     * Default `WP_TESTS_DIR` to `/tmp/wordpress-tests-lib` rather than erroring out if not defined via environment variable
     * Enable more error output for unit tests

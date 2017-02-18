@@ -198,19 +198,24 @@ class c2c_YearsAgoToday {
 			$body = apply_filters(
 				'c2c_years_ago_today-email-body-no-posts',
 				sprintf(
-					__( 'No posts were published to the site %s on this day from any past year.', 'years-ago-today' ),
-					wp_specialchars_decode( get_option('blogname'), ENT_QUOTES )
+					/* translators: 1: name of the site, 2: date string for today */
+					__( 'No posts were published to the site %1$s on <strong>%2$s</strong> in any past year.', 'years-ago-today' ),
+					wp_specialchars_decode( get_option('blogname'), ENT_QUOTES ),
+					/* translators: date string for today */
+					date_i18n( __( 'M jS' ), current_time( 'timestamp' ) )
 				)
 			);
 		} else {
 			// Build out email body.
 			$body = sprintf(
 				$query->post_count > 1
-					/* translators: %s: the name of the site */
-					? __( 'The following posts have been published to the site %s on this day in previous years:', 'years-ago-today' )
-					/* translators: %s: the name of the site */
-					: __( 'The following post has been published to the site %s on this day in a previous year:', 'years-ago-today' ),
-				wp_specialchars_decode( get_option('blogname'), ENT_QUOTES )
+					/* translators: 1: name of the site, 2: date string for today */
+					? __( 'The following posts have been published to the site %1$s on <strong>%2$s</strong> in previous years:', 'years-ago-today' )
+					/* translators: 1: name of the site, 2: date string for today */
+					: __( 'The following post has been published o the site %1$s on <strong>%2$s</strong> in a previous year:', 'years-ago-today' ),
+				wp_specialchars_decode( get_option('blogname'), ENT_QUOTES ),
+				/* translators: date string for today */
+				date_i18n( __( 'M jS' ), current_time( 'timestamp' ) )
 			);
 
 			$year = '';
@@ -265,11 +270,15 @@ class c2c_YearsAgoToday {
 
 		if ( $q->have_posts() ) :
 			echo '<p>';
-			$q->post_count > 1
-				/* translators: %s: the name of the site */
-				? _e( 'The following posts have been published to the site on this day in previous years:', 'years-ago-today' )
-				/* translators: %s: the name of the site */
-				: _e( 'The following post has been published to the site on this day in a previous year:', 'years-ago-today' );
+			printf(
+				$q->post_count > 1
+					/* translators: %s: date string for today */
+					? __( 'The following posts have been published on <strong>%s</strong> in previous years:', 'years-ago-today' )
+					/* translators: %s: date string for today */
+					: __( 'The following post has been published on <strong>%s</strong> in a previous year:', 'years-ago-today' ),
+				/* translators: date string for today */
+				date_i18n( __( 'M jS' ), current_time( 'timestamp' ) )
+			);
 			echo '</p>';
 			echo '<ul class="years-ago-today-posts">';
 			$year = '';
@@ -285,7 +294,13 @@ class c2c_YearsAgoToday {
 			endwhile;
 			echo '</ul>';
 		else :
-			echo '<p>' . __( 'No posts were published on this day from any past year.', 'years-ago-today' ) . '</p>';
+			echo '<p>';
+			printf(
+				__( 'No posts were published on <strong>%s</strong> from any past year.', 'years-ago-today' ),
+				/* translators: date string for today */
+				date_i18n( __( 'M jS' ), current_time( 'timestamp' ) )
+			);
+			echo '</p>';
 		endif;
 
 		echo '</div>';

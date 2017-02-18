@@ -50,7 +50,7 @@ class Years_Ago_Today_Test extends WP_UnitTestCase {
 		$out = ob_get_contents();
 		ob_end_clean();
 
-		$this->assertContains( 'No posts were published on this day from any past year.', $out );
+		$this->assertContains( 'No posts were published on <strong>' . current_time( 'M jS' ) . '</strong> from any past year.', $out );
 	}
 
 	public function test_shows_singular_message_with_single_matching_past_year_posts() {
@@ -61,7 +61,7 @@ class Years_Ago_Today_Test extends WP_UnitTestCase {
 		$out = ob_get_contents();
 		ob_end_clean();
 
-		$this->assertContains( 'The following post has been published to the site on this day in a previous year:', $out );
+		$this->assertContains( 'The following post has been published on <strong>' . current_time( 'M jS' ) . '</strong> in a previous year:', $out );
 	}
 
 	public function test_shows_plural_message_with_multiple_matching_past_year_posts() {
@@ -73,7 +73,7 @@ class Years_Ago_Today_Test extends WP_UnitTestCase {
 		$out = ob_get_contents();
 		ob_end_clean();
 
-		$this->assertContains( 'The following posts have been published to the site on this day in previous years:', $out );
+		$this->assertContains( 'The following posts have been published on <strong>' . current_time( 'M jS' ) . '</strong> in previous years:', $out );
 	}
 
 	public function test_get_posts_query_obj_with_no_matching_past_year_posts() {
