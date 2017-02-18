@@ -212,7 +212,7 @@ class c2c_YearsAgoToday {
 					/* translators: 1: name of the site, 2: date string for today */
 					? __( 'The following posts have been published to the site %1$s on <strong>%2$s</strong> in previous years:', 'years-ago-today' )
 					/* translators: 1: name of the site, 2: date string for today */
-					: __( 'The following post has been published o the site %1$s on <strong>%2$s</strong> in a previous year:', 'years-ago-today' ),
+					: __( 'The following post has been published to the site %1$s on <strong>%2$s</strong> in a previous year:', 'years-ago-today' ),
 				wp_specialchars_decode( get_option('blogname'), ENT_QUOTES ),
 				/* translators: date string for today */
 				date_i18n( __( 'M jS' ), current_time( 'timestamp' ) )
