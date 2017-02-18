@@ -303,7 +303,7 @@ class c2c_YearsAgoToday {
 			$month = mysql2date( 'm', $now );
 			$day   = mysql2date( 'd', $now );
 
-			// Check data with more performant BETWEEN rather than using DATE()
+			// Check date with more performant BETWEEN rather than using DATE()
 			// or its variations (YEAR(), MONTH(), DAYOFMONTH()).
 			$date_ranges = array();
 			foreach ( $years as $year ) {
@@ -339,9 +339,9 @@ class c2c_YearsAgoToday {
 			$first_year = wp_cache_get( 'first_published_year', 'c2c_years_ago_today' );
 		}
 
-		// If not in the cache, figure it out.',
+		// If not in the cache, figure it out.
 		if ( false === $first_year ) {
-			// Query for the earlies published year.
+			// Query for the earliest published year.
 			$first_year = $wpdb->get_var( "SELECT YEAR(MIN(post_date)) FROM $wpdb->posts WHERE post_status IN ( 'publish', 'private' )" );
 
 			// If nothing was found, assume current year.
@@ -362,8 +362,10 @@ class c2c_YearsAgoToday {
 	 *
 	 * @since 1.0
 	 *
-	 * @param bool            $return_posts True to return just an array of posts, false to return WP_Query object. Default false.
-	 * @return array|WP_Query Array is return_posts is true, WP_Query if false.
+	 * @param bool $return_posts Return array of queried posts or the WP_Query
+	 *                           object? True to return array posts, false to
+	 *                           return WP_Query object. Default false.
+	 * @return array|WP_Query    Array is return_posts is true, WP_Query if false.
 	 */
 	public static function get_posts( $return_posts = false ) {
 		$query = new WP_Query( array(
@@ -378,8 +380,7 @@ class c2c_YearsAgoToday {
 	}
 
 	/**
-	 * Adds hook to outputs CSS for the display of the Trashed By column if
-	 * on the appropriate admin page.
+	 * Adds hook to outputs CSS for the display of the Years Ago today widget.
 	 *
 	 * @since 1.0
 	 */
@@ -419,7 +420,7 @@ class c2c_YearsAgoToday {
 	 * @since 1.0
 	 *
 	 * @param  int  $user_id The user ID.
-	 * @return bool True if the option saved successfully.
+	 * @return bool          True if the option saved successfully.
 	 */
 	public static function option_save( $user_id ) {
 		if ( ! current_user_can( 'edit_user', $user_id ) ) {
