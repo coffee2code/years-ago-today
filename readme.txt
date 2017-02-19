@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: dashboard, admin dashboard, on this day, past posts, history, dashboard widget, posts, coffee2code
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Requires at least: 4.1
+Requires at least: 4.6
 Tested up to: 4.7
 Stable tag: 1.1
 
@@ -67,6 +67,7 @@ The cron system for WordPress (which handles scheduled events, such as the sched
     * Default `WP_TESTS_DIR` to `/tmp/wordpress-tests-lib` rather than erroring out if not defined via environment variable
     * Enable more error output for unit tests
 * Change: Note compatibility through WP 4.7+
+* Change: Remove support for WordPress older than WP 4.6 (should still work for earlier versions back to WP 4.1)
 * Change: Minor inline code documnetation tweaks (fix typos, spacing)
 * Change: Update copyright date (2017)
 * New: Add LICENSE file
