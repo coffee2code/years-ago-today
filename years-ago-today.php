@@ -204,11 +204,13 @@ class c2c_YearsAgoToday {
 		} else {
 			// Build out email body.
 			$body = sprintf(
-				$query->post_count > 1
-					/* translators: 1: name of the site, 2: date string for today */
-					? __( 'The following posts have been published to the site %1$s on <strong>%2$s</strong> in previous years:', 'years-ago-today' )
-					/* translators: 1: name of the site, 2: date string for today */
-					: __( 'The following post has been published to the site %1$s on <strong>%2$s</strong> in a previous year:', 'years-ago-today' ),
+				/* translators: 1: site name, 2: date string for today */
+				_n(
+					'The following post has been published to the site %1$s on <strong>%2$s</strong> in a previous year:',
+					'The following posts have been published to the site %1$s on <strong>%2$s</strong> in previous years:',
+					$query->post_count,
+					'years-ago-today'
+				),
 				$site_name,
 				/* translators: date string for today */
 				date_i18n( __( 'M jS' ), current_time( 'timestamp' ) )
@@ -332,12 +334,14 @@ class c2c_YearsAgoToday {
 
 		if ( $q->have_posts() ) :
 			echo '<p>';
-			printf(
-				$q->post_count > 1
-					/* translators: %s: date string for today */
-					? __( 'The following posts have been published on <strong>%s</strong> in previous years:', 'years-ago-today' )
-					/* translators: %s: date string for today */
-					: __( 'The following post has been published on <strong>%s</strong> in a previous year:', 'years-ago-today' ),
+			echo sprintf(
+				/* translators: 1: site name, 2: date string for today */
+				_n(
+					'The following post has been published on <strong>%s</strong> in a previous year:',
+					'The following posts have been published on <strong>%s</strong> in previous years:',
+					$q->post_count,
+					'years-ago-today'
+				),
 				/* translators: date string for today */
 				date_i18n( __( 'M jS' ), current_time( 'timestamp' ) )
 			);
