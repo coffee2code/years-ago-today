@@ -68,7 +68,7 @@ class Years_Ago_Today_Test extends WP_UnitTestCase {
 		$out = ob_get_contents();
 		ob_end_clean();
 
-		$this->assertContains( 'The following post has been published on <strong>' . current_time( 'M jS' ) . '</strong> in a previous year:', $out );
+		$this->assertContains( '<strong>1</strong> post has been published on <strong>' . current_time( 'M jS' ) . '</strong> in a previous year:', $out );
 	}
 
 	public function test_shows_plural_message_with_multiple_matching_past_year_posts() {
@@ -80,7 +80,7 @@ class Years_Ago_Today_Test extends WP_UnitTestCase {
 		$out = ob_get_contents();
 		ob_end_clean();
 
-		$this->assertContains( 'The following posts have been published on <strong>' . current_time( 'M jS' ) . '</strong> in previous years:', $out );
+		$this->assertContains( '<strong>2</strong> posts have been published on <strong>' . current_time( 'M jS' ) . '</strong> in previous years:', $out );
 	}
 
 	public function test_get_posts_query_obj_with_no_matching_past_year_posts() {
@@ -187,7 +187,7 @@ class Years_Ago_Today_Test extends WP_UnitTestCase {
 		$this->factory->post->create( array( 'post_date' => $this->get_date( '2012' ) ) );
 
 		$this->assertContains(
-			'The following post has been published to the site Test Blog on <strong>' . current_time( 'M jS' ) . '</strong> in a previous year:',
+			'<strong>1</strong> post has been published to the site Test Blog on <strong>' . current_time( 'M jS' ) . '</strong> in a previous year:',
 			c2c_YearsAgoToday::get_email_body()
 		);
 	}
@@ -196,7 +196,7 @@ class Years_Ago_Today_Test extends WP_UnitTestCase {
 		$post_title = 'A blast from the past';
 		$post = $this->factory->post->create( array( 'post_title' => $post_title, 'post_date' => $this->get_date( '2012' ) ) );
 
-		$email  = 'The following post has been published to the site Test Blog on <strong>' . current_time( 'M jS' ) . '</strong> in a previous year:';
+		$email  = '<strong>1</strong> post has been published to the site Test Blog on <strong>' . current_time( 'M jS' ) . '</strong> in a previous year:';
 		$email .= "\n\n== 2012 ==\n";
 		$email .= "* {$post_title} : " . get_permalink( $post ) . "\n";
 
@@ -211,7 +211,7 @@ class Years_Ago_Today_Test extends WP_UnitTestCase {
 		$this->factory->post->create( array( 'post_date' => $this->get_date( '2014' ) ) );
 
 		$this->assertContains(
-			'The following posts have been published to the site Test Blog on <strong>' . current_time( 'M jS' ) . '</strong> in previous years:',
+			'<strong>2</strong> posts have been published to the site Test Blog on <strong>' . current_time( 'M jS' ) . '</strong> in previous years:',
 			c2c_YearsAgoToday::get_email_body()
 		);
 	}
@@ -222,7 +222,7 @@ class Years_Ago_Today_Test extends WP_UnitTestCase {
 		$post_title2 = 'Days of future years past';
 		$post2 = $this->factory->post->create( array( 'post_title' => $post_title2, 'post_date' => $this->get_date( '2014' ) ) );
 
-		$email  = 'The following posts have been published to the site Test Blog on <strong>' . current_time( 'M jS' ) . '</strong> in previous years:';
+		$email  = '<strong>2</strong> posts have been published to the site Test Blog on <strong>' . current_time( 'M jS' ) . '</strong> in previous years:';
 		$email .= "\n\n== 2014 ==\n";
 		$email .= "* {$post_title2} : " . get_permalink( $post2 ) . "\n";
 		$email .= "\n\n== 2012 ==\n";
