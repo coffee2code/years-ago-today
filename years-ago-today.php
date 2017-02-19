@@ -189,7 +189,7 @@ class c2c_YearsAgoToday {
 
 		// If there were no posts, check a filter to see if an email shouldn't be sent.
 		if ( ! $query->have_posts() && ! apply_filters( 'c2c_years_ago_today-email-if-no-posts', false ) ) {
-			return;
+			$body = '';
 		}  elseif ( ! $query->have_posts() ) {
 			$body = apply_filters(
 				'c2c_years_ago_today-email-body-no-posts',
