@@ -247,6 +247,35 @@ class c2c_YearsAgoToday {
 	}
 
 	/**
+	 * Amends a user-specific footer to an email body.
+	 *
+	 * Adds an explanation about the email to the recipient. Serves to remind
+	 * the user why they are receiving the email, what it is about, and how to
+	 * stop it.
+	 *
+	 * @since 1.2
+	 *
+	 * @param  int    $user_id The user ID.
+	 * @param  string $body.   The email body.
+	 * @return string
+	 */
+	public static function add_user_email_footer( $user_id, $body ) {
+		$body .= "\n\n\n-------------------------------\n";
+		$body .= sprintf(
+			__( 'You received this email because you have opted into receiving a daily email about posts published on this day in years past on the site %s, which is using the Years Ago Today plugin.', 'years-ago-today' ),
+			wp_specialchars_decode( get_option('blogname'), ENT_QUOTES )
+		);
+		$body .= "\n\n";
+		$body .= sprintf(
+			__( 'If you wish to discontinue receiving these emails, simply log into the site and visit your profile at %s to uncheck the checkbox labeled "Email me daily about posts published on this day in years past."', 'years-ago-today' ),
+			get_edit_profile_url( $user_id )
+		);
+		$body .= "\n";
+
+		return $body;
+	}
+
+	/**
 	 * Sends out daily email.
 	 *
 	 * @since 1.0
@@ -273,7 +302,7 @@ class c2c_YearsAgoToday {
 		// Send email to each user.
 		foreach ( $users as $user ) {
 			if ( $user->user_email ) {
-				wp_mail( $user->user_email, $subject, $body );
+				wp_mail( $user->user_email, $subject, self::add_user_email_footer( $user->ID, $body ) );
 			}
 		}
 	}

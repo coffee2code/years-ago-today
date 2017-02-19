@@ -57,6 +57,7 @@ The cron system for WordPress (which handles scheduled events, such as the sched
 == Changelog ==
 
 = () =
+* New: Add footer to daily emails to provide context about what the email is, why it is being sent, and where to go to discontinue it
 * New: Add `get_email_subject()` for getting email subject
 * New: Add `get_email_body()` for getting email body
 * Change: Split out functionality from `cron_email()` into the two aforementioned functions and bail if either return empty string

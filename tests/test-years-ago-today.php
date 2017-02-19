@@ -234,4 +234,25 @@ class Years_Ago_Today_Test extends WP_UnitTestCase {
 		);
 	}
 
+	/*
+	 * add_user_email_footer()
+	 */
+
+	public function test_add_user_email_footer() {
+		$user_id = $this->factory->user->create();
+		$user_profile_url = get_edit_profile_url( $user_id );
+		$text = <<<HTML
+Hi!
+
+
+-------------------------------
+You received this email because you have opted into receiving a daily email about posts published on this day in years past on the site Test Blog, which is using the Years Ago Today plugin.
+
+If you wish to discontinue receiving these emails, simply log into the site and visit your profile at {$user_profile_url} to uncheck the checkbox labeled "Email me daily about posts published on this day in years past."
+
+HTML;
+
+		$this->assertEquals( $text, c2c_YearsAgoToday::add_user_email_footer( $user_id, 'Hi!' ) );
+	}
+
 }
