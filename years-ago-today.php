@@ -185,6 +185,8 @@ class c2c_YearsAgoToday {
 		// Get the list of posts from years ago.
 		$query = self::get_posts();
 
+		$site_name = wp_specialchars_decode( get_option('blogname'), ENT_QUOTES );
+
 		// If there were no posts, check a filter to see if an email shouldn't be sent.
 		if ( ! $query->have_posts() && ! apply_filters( 'c2c_years_ago_today-email-if-no-posts', false ) ) {
 			return;
@@ -194,7 +196,7 @@ class c2c_YearsAgoToday {
 				sprintf(
 					/* translators: 1: name of the site, 2: date string for today */
 					__( 'No posts were published to the site %1$s on <strong>%2$s</strong> in any past year.', 'years-ago-today' ),
-					wp_specialchars_decode( get_option('blogname'), ENT_QUOTES ),
+					$site_name,
 					/* translators: date string for today */
 					date_i18n( __( 'M jS' ), current_time( 'timestamp' ) )
 				)
@@ -207,7 +209,7 @@ class c2c_YearsAgoToday {
 					? __( 'The following posts have been published to the site %1$s on <strong>%2$s</strong> in previous years:', 'years-ago-today' )
 					/* translators: 1: name of the site, 2: date string for today */
 					: __( 'The following post has been published to the site %1$s on <strong>%2$s</strong> in a previous year:', 'years-ago-today' ),
-				wp_specialchars_decode( get_option('blogname'), ENT_QUOTES ),
+				$site_name,
 				/* translators: date string for today */
 				date_i18n( __( 'M jS' ), current_time( 'timestamp' ) )
 			);
