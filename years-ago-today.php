@@ -427,11 +427,11 @@ class c2c_YearsAgoToday {
 		$day   = mysql2date( 'd', $now );
 
 		$query = new WP_Query( array(
-			'post_parent'        => '',
-			'post_status'        => array( 'publish' ),
-			'post_type'          => array( 'post' ),
-			'posts_per_page'     => -1,
-			'date_query'         => array(
+			'post_parent'    => '',
+			'post_status'    => array( 'publish' ),
+			'post_type'      => array( 'post' ),
+			'posts_per_page' => -1,
+			'date_query'     => array(
 				'year'  => $years,
 				'month' => $month,
 				'day'   => $day,
