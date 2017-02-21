@@ -65,6 +65,9 @@ The cron system for WordPress (which handles scheduled events, such as the sched
     * Include month and day of the month instead of saying "this day"
     * Include count of the number of posts being listed
     * Use separate singular and plural strings
+* Change: Use built-in WP date query syntax for finding older posts
+    * Delete `add_year_clause_to_query()`
+    * Move some of the date handling code from `add_year_clause_to_query()` into `get_posts()` for use in date_query
 * Change: Update unit test bootstrap
     * Default `WP_TESTS_DIR` to `/tmp/wordpress-tests-lib` rather than erroring out if not defined via environment variable
     * Enable more error output for unit tests

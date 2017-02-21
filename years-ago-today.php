@@ -116,9 +116,6 @@ class c2c_YearsAgoToday {
 		// Register dashboard widget.
 		add_action( 'wp_dashboard_setup',       array( __CLASS__, 'dashboard_setup' ) );
 
-		// Modify posts query for year ago searches.
-		add_action( 'posts_where',              array( __CLASS__, 'add_year_clause_to_query' ), 10, 2 );
-
 		// Adds the checkbox to user profiles.
 		add_action( 'profile_personal_options', array( __CLASS__, 'add_daily_email_optin_checkbox' ) );
 
@@ -377,48 +374,6 @@ class c2c_YearsAgoToday {
 	}
 
 	/**
-	 * Adjusts WHERE clause to include date range to find years ago posts.
-	 *
-	 * @since 1.0
-	 *
-	 * @param string   $where The SQL WHERE clause.
-	 * @param WP_Query $query The query object.
-	 * @return string
-	 */
-	public static function add_year_clause_to_query( $where, $query ) {
-		global $wpdb;
-
-		if ( isset( $query->query_vars['is_years_ago_today'] ) && '1' == $query->query_vars['is_years_ago_today'] ) {
-
-			$first_year = self::get_first_published_year();
-			$current_year = mysql2date( 'Y', current_time( 'mysql' ) );
-
-			$years = range( $first_year, $current_year - 1 );
-			$now   = current_time( 'timestamp' );
-			$month = mysql2date( 'm', $now );
-			$day   = mysql2date( 'd', $now );
-
-			// Check date with more performant BETWEEN rather than using DATE()
-			// or its variations (YEAR(), MONTH(), DAYOFMONTH()).
-			$date_ranges = array();
-			foreach ( $years as $year ) {
-				$date_ranges[] = $wpdb->prepare(
-					'( post_date_gmt BETWEEN %s AND %s )',
-					"${year}-${month}-{$day} 00:00:00",
-					"${year}-${month}-{$day} 23:59:59"
-				);
-			}
-
-			if ( $date_ranges ) {
-				$where .= ' AND (' . implode( ' OR ', $date_ranges ) . ' ) ';
-			}
-
-		}
-
-		return $where;
-	}
-
-	/**
 	 * Gets the year of the first published post on the site.
 	 *
 	 * @return string
@@ -460,15 +415,27 @@ class c2c_YearsAgoToday {
 	 * @param bool $return_posts Return array of queried posts or the WP_Query
 	 *                           object? True to return array posts, false to
 	 *                           return WP_Query object. Default false.
-	 * @return array|WP_Query    Array is return_posts is true, WP_Query if false.
+	 * @return array|WP_Query    Array if return_posts is true, WP_Query if false.
 	 */
 	public static function get_posts( $return_posts = false ) {
+		$first_year   = self::get_first_published_year();
+		$current_year = mysql2date( 'Y', current_time( 'mysql' ) );
+
+		$years = range( $first_year, $current_year - 1 );
+		$now   = current_time( 'timestamp' );
+		$month = mysql2date( 'm', $now );
+		$day   = mysql2date( 'd', $now );
+
 		$query = new WP_Query( array(
 			'post_parent'        => '',
 			'post_status'        => array( 'publish' ),
 			'post_type'          => array( 'post' ),
 			'posts_per_page'     => -1,
-			'is_years_ago_today' => 1,
+			'date_query'         => array(
+				'year'  => $years,
+				'month' => $month,
+				'day'   => $day,
+			),
 		) );
 
 		return $return_posts ? $query->get_posts() : $query;
