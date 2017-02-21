@@ -51,6 +51,10 @@ class Years_Ago_Today_Test extends WP_UnitTestCase {
 		$this->assertNotFalse( wp_next_scheduled( c2c_YearsAgoToday::$cron_name ) );
 	}
 
+	/*
+	 * wp_dashboard_years_ago_today()
+	 */
+
 	public function test_shows_message_about_no_previous_year_posts() {
 		// Extra non-matching post
 		$this->factory->post->create( array( 'post_date' => $this->get_date( '2015', false ) ) );
@@ -90,6 +94,10 @@ class Years_Ago_Today_Test extends WP_UnitTestCase {
 		$this->assertContains( '<strong>2</strong> posts have been published on <strong>' . current_time( 'M jS' ) . '</strong> in previous years:', $out );
 	}
 
+	/*
+	 * get_posts()
+	 */
+
 	public function test_get_posts_query_obj_with_no_matching_past_year_posts() {
 		$this->factory->post->create( array( 'post_date' => $this->get_date( '2012', false ) ) );
 
@@ -122,6 +130,10 @@ class Years_Ago_Today_Test extends WP_UnitTestCase {
 		$this->assertEquals( get_post( $post_id ), $posts[0] );
 	}
 
+	/*
+	 * get_users_to_email()
+	 */
+
 	public function test_get_users_to_email_with_no_users() {
 		$user1_id = $this->factory->user->create();
 		$user2_id = $this->factory->user->create();
@@ -143,6 +155,10 @@ class Years_Ago_Today_Test extends WP_UnitTestCase {
 
 		$this->assertEquals( array( $user1, $user3 ), c2c_YearsAgoToday::get_users_to_email() );
 	}
+
+	/*
+	 * get_first_published_year()
+	 */
 
 	public function test_get_first_published_year_with_no_posts() {
 		$this->assertEquals( current_time( 'Y' ), c2c_YearsAgoToday::get_first_published_year() );
