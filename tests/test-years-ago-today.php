@@ -101,7 +101,10 @@ class Years_Ago_Today_Test extends WP_UnitTestCase {
 	public function test_get_posts_query_obj_with_no_matching_past_year_posts() {
 		$this->factory->post->create( array( 'post_date' => $this->get_date( '2012', false ) ) );
 
-		$this->assertFalse( c2c_YearsAgoToday::get_posts()->have_posts() );
+		$posts = c2c_YearsAgoToday::get_posts();
+
+		$this->assertTrue( is_a( $posts, 'WP_Query' ) );
+		$this->assertFalse( $posts->have_posts() );
 	}
 
 	public function test_get_posts_query_obj_with_matching_past_year_posts() {
