@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Years Ago Today
- * Version:     1.1
+ * Version:     1.2
  * Plugin URI:  http://coffee2code.com/wp-plugins/years-ago-today/
  * Author:      Scott Reilly
  * Author URI:  http://coffee2code.com/
@@ -19,16 +19,17 @@
  *
  * @package Years_Ago_Today
  * @author  Scott Reilly
- * @version 1.1
+ * @version 1.2
  */
 
 /*
  * TODO:
  * - Put CSS in .css file.
- * - Show more info about post in widget, such as author. (Maybe hide by default and show on hover.)
+ * - Show more info about post in widget, such as author (if on multi-author site). (Maybe hide by default and show on hover.)
  * - Add cap to control what users can get the daily email?
  * - Add way to filter by author.
  * - Allow post listing template to be overridden.
+ * - Add widget for front-end use.
  */
 
 /*
@@ -101,7 +102,7 @@ class c2c_YearsAgoToday {
 	 * @since 1.0
 	 */
 	public static function version() {
-		return '1.1';
+		return '1.2';
 	}
 
 	/**

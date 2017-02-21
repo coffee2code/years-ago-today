@@ -6,7 +6,7 @@ License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Requires at least: 4.6
 Tested up to: 4.7
-Stable tag: 1.1
+Stable tag: 1.2
 
 Admin dashboard widget (and optional daily email) that lists posts published to your site on this day in years past.
 
@@ -19,10 +19,11 @@ Links: [Plugin Homepage](http://coffee2code.com/wp-plugins/years-ago-today/) | [
 
 == Installation ==
 
-1. Unzip `years-ago-today.zip` inside the plugins directory for your site (typically `/wp-content/plugins/`). Or install via the built-in WordPress plugin installer)
+1. Install via the built-in WordPress plugin installer. Or download and unzip `years-ago-today.zip` inside the plugins directory for your site (typically `wp-content/plugins/`)
 2. Activate the plugin through the 'Plugins' admin menu in WordPress
 3. View the widget on your admin dashboard.
 4. (Optional.) To sign up for a daily email that lists posts published that day, go to your profile, set the checkbox for '"Years Ago Today" email', and then press the button to update your profile.
+
 
 == Screenshots ==
 
@@ -56,7 +57,7 @@ The cron system for WordPress (which handles scheduled events, such as the sched
 
 == Changelog ==
 
-= () =
+= 1.2 (2017-02-20) =
 * New: Add footer to daily emails to provide context about what the email is, why it is being sent, and where to go to discontinue it
 * Change: Make prefatory post listing text (in widget and email) more informative
     * Include month and day of the month instead of saying "this day"
@@ -105,6 +106,9 @@ The cron system for WordPress (which handles scheduled events, such as the sched
 
 
 == Upgrade Notice ==
+
+= 1.2 =
+Minor update: added footer text to daily emails, show today's date and number of posts in dashboard widget and email, use separate singular and plural strings, compatibility is now WP 4.6-4.7+, updated copyright date (2017), and more
 
 = 1.1 =
 Recommended update: bugfix for posts published the day after past todays sometimes being included; adjustments to utilize language packs; minor unit test tweaks; noted compatibility through WP 4.4+; and updated copyright date
