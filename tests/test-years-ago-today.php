@@ -52,6 +52,9 @@ class Years_Ago_Today_Test extends WP_UnitTestCase {
 	}
 
 	public function test_shows_message_about_no_previous_year_posts() {
+		// Extra non-matching post
+		$this->factory->post->create( array( 'post_date' => $this->get_date( '2015', false ) ) );
+
 		ob_start();
 		c2c_YearsAgoToday::wp_dashboard_years_ago_today();
 		$out = ob_get_contents();
@@ -62,6 +65,8 @@ class Years_Ago_Today_Test extends WP_UnitTestCase {
 
 	public function test_shows_singular_message_with_single_matching_past_year_posts() {
 		$this->factory->post->create( array( 'post_date' => $this->get_date( '2012' ) ) );
+		// Extra non-matching post
+		$this->factory->post->create( array( 'post_date' => $this->get_date( '2015', false ) ) );
 
 		ob_start();
 		c2c_YearsAgoToday::wp_dashboard_years_ago_today();
@@ -74,6 +79,8 @@ class Years_Ago_Today_Test extends WP_UnitTestCase {
 	public function test_shows_plural_message_with_multiple_matching_past_year_posts() {
 		$this->factory->post->create( array( 'post_date' => $this->get_date( '2012' ) ) );
 		$this->factory->post->create( array( 'post_date' => $this->get_date( '2014' ) ) );
+		// Extra non-matching post
+		$this->factory->post->create( array( 'post_date' => $this->get_date( '2015', false ) ) );
 
 		ob_start();
 		c2c_YearsAgoToday::wp_dashboard_years_ago_today();
@@ -185,6 +192,8 @@ class Years_Ago_Today_Test extends WP_UnitTestCase {
 
 	public function test_get_email_body_shows_singular_message_with_single_matching_past_year_posts() {
 		$this->factory->post->create( array( 'post_date' => $this->get_date( '2012' ) ) );
+		// Extra non-matching post
+		$this->factory->post->create( array( 'post_date' => $this->get_date( '2015', false ) ) );
 
 		$this->assertContains(
 			'<strong>1</strong> post has been published to the site Test Blog on <strong>' . current_time( 'M jS' ) . '</strong> in a previous year:',
@@ -195,6 +204,8 @@ class Years_Ago_Today_Test extends WP_UnitTestCase {
 	public function test_get_email_body_whole_email_with_single_matching_past_year_posts() {
 		$post_title = 'A blast from the past';
 		$post = $this->factory->post->create( array( 'post_title' => $post_title, 'post_date' => $this->get_date( '2012' ) ) );
+		// Extra non-matching post
+		$this->factory->post->create( array( 'post_date' => $this->get_date( '2015', false ) ) );
 
 		$email  = '<strong>1</strong> post has been published to the site Test Blog on <strong>' . current_time( 'M jS' ) . '</strong> in a previous year:';
 		$email .= "\n\n== 2012 ==\n";
@@ -209,6 +220,8 @@ class Years_Ago_Today_Test extends WP_UnitTestCase {
 	public function test_get_email_body_shows_plural_message_with_multiple_matching_past_year_posts() {
 		$this->factory->post->create( array( 'post_date' => $this->get_date( '2012' ) ) );
 		$this->factory->post->create( array( 'post_date' => $this->get_date( '2014' ) ) );
+		// Extra non-matching post
+		$this->factory->post->create( array( 'post_date' => $this->get_date( '2015', false ) ) );
 
 		$this->assertContains(
 			'<strong>2</strong> posts have been published to the site Test Blog on <strong>' . current_time( 'M jS' ) . '</strong> in previous years:',
@@ -221,6 +234,8 @@ class Years_Ago_Today_Test extends WP_UnitTestCase {
 		$post1 = $this->factory->post->create( array( 'post_title' => $post_title1, 'post_date' => $this->get_date( '2012' ) ) );
 		$post_title2 = 'Days of future years past';
 		$post2 = $this->factory->post->create( array( 'post_title' => $post_title2, 'post_date' => $this->get_date( '2014' ) ) );
+		// Extra non-matching post
+		$this->factory->post->create( array( 'post_date' => $this->get_date( '2015', false ) ) );
 
 		$email  = '<strong>2</strong> posts have been published to the site Test Blog on <strong>' . current_time( 'M jS' ) . '</strong> in previous years:';
 		$email .= "\n\n== 2014 ==\n";
