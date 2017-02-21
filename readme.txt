@@ -69,6 +69,9 @@ The cron system for WordPress (which handles scheduled events, such as the sched
     * Add `get_email_subject()` for getting email subject
     * Add `get_email_body()` for getting email body
     * Bail if either return empty string
+* Change: Prevent object instantiation
+    * Add private `__construct()`
+    * Add private `__wakeup()`
 * Change: Update unit test bootstrap
     * Default `WP_TESTS_DIR` to `/tmp/wordpress-tests-lib` rather than erroring out if not defined via environment variable
     * Enable more error output for unit tests

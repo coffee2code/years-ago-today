@@ -82,6 +82,20 @@ class c2c_YearsAgoToday {
 	public static $enabled_option_value = '1';
 
 	/**
+	 * Prevents instantiation.
+	 *
+	 * @since 1.2
+	 */
+	private function __construct() {}
+
+	/**
+	 * Prevents unserializing an instance.
+	 *
+	 * @since 1.2
+	 */
+	private function __wakeup() {}
+
+	/**
 	 * Returns version of the plugin.
 	 *
 	 * @since 1.0
