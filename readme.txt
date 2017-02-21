@@ -58,9 +58,6 @@ The cron system for WordPress (which handles scheduled events, such as the sched
 
 = () =
 * New: Add footer to daily emails to provide context about what the email is, why it is being sent, and where to go to discontinue it
-* New: Add `get_email_subject()` for getting email subject
-* New: Add `get_email_body()` for getting email body
-* Change: Split out functionality from `cron_email()` into the two aforementioned functions and bail if either return empty string
 * Change: Make prefatory post listing text (in widget and email) more informative
     * Include month and day of the month instead of saying "this day"
     * Include count of the number of posts being listed
@@ -68,6 +65,10 @@ The cron system for WordPress (which handles scheduled events, such as the sched
 * Change: Use built-in WP date query syntax for finding older posts
     * Delete `add_year_clause_to_query()`
     * Move some of the date handling code from `add_year_clause_to_query()` into `get_posts()` for use in date_query
+* Change: Split out functionality from `cron_email()` into single-purpose functions
+    * Add `get_email_subject()` for getting email subject
+    * Add `get_email_body()` for getting email body
+    * Bail if either return empty string
 * Change: Update unit test bootstrap
     * Default `WP_TESTS_DIR` to `/tmp/wordpress-tests-lib` rather than erroring out if not defined via environment variable
     * Enable more error output for unit tests
