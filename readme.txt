@@ -81,6 +81,7 @@ The cron system for WordPress (which handles scheduled events, such as the sched
 * Change: Minor inline code documnetation tweaks (fix typos, spacing)
 * Change: Update copyright date (2017)
 * New: Add LICENSE file
+* Change: Update screenshots
 
 = 1.1 (2016-01-21) =
 * Bugfix: Fix for bug when posts across two days were returned for today by using site's time and not GMT.
