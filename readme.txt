@@ -6,7 +6,7 @@ License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Requires at least: 4.6
 Tested up to: 4.7
-Stable tag: 1.2
+Stable tag: 1.2.1
 
 Admin dashboard widget (and optional daily email) that lists posts published to your site on this day in years past.
 
@@ -56,6 +56,9 @@ The cron system for WordPress (which handles scheduled events, such as the sched
 
 
 == Changelog ==
+
+= 1.2.1 (2017-05-09) =
+* Fix: Properly constrain CSS `li` styling to apply only to plugin's dashboard widget and not any other dashboard widgets
 
 = 1.2 (2017-02-20) =
 * New: Add footer to daily emails to provide context about what the email is, why it is being sent, and where to go to discontinue it
@@ -107,6 +110,9 @@ The cron system for WordPress (which handles scheduled events, such as the sched
 
 
 == Upgrade Notice ==
+
+= 1.2.1 =
+Minor bugfix update: Prevent admin dashboard CSS styling from applying to other dashboard widgets
 
 = 1.2 =
 Minor update: added footer text to daily emails, show today's date and number of posts in dashboard widget and email, use separate singular and plural strings, compatibility is now WP 4.6-4.7+, updated copyright date (2017), and more
