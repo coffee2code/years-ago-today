@@ -58,6 +58,7 @@ The cron system for WordPress (which handles scheduled events, such as the sched
 == Changelog ==
 
 = 1.2.2 () =
+* New: Add README.md
 * Change: Note compatibility through WP 4.9+
 * Change: Update copyright date (2018)
 * Change: Minor whitespace tweaks in unit test bootstrap
