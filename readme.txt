@@ -60,6 +60,7 @@ The cron system for WordPress (which handles scheduled events, such as the sched
 = 1.2.2 () =
 * Change: Note compatibility through WP 4.9+
 * Change: Update copyright date (2018)
+* Change: Minor whitespace tweaks in unit test bootstrap
 
 = 1.2.1 (2017-05-09) =
 * Fix: Properly constrain CSS `li` styling to apply only to plugin's dashboard widget and not any other dashboard widgets
