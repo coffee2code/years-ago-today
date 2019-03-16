@@ -144,7 +144,7 @@ add_filter( 'c2c_years_ago_today-first_published_year', function ( $year ) { ret
 = 1.2.1 (2017-05-09) =
 * Fix: Properly constrain CSS `li` styling to apply only to plugin's dashboard widget and not any other dashboard widgets
 
-= Full changelog is available in [CHANGELOG.md](CHANGELOG.md). =
+_Full changelog is available in [CHANGELOG.md](CHANGELOG.md)._
 
 
 == Upgrade Notice ==
