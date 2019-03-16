@@ -5,7 +5,7 @@ Tags: dashboard, admin dashboard, on this day, past posts, history, dashboard wi
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Requires at least: 4.6
-Tested up to: 4.9
+Tested up to: 5.1
 Stable tag: 1.2.2
 
 Admin dashboard widget (and optional daily email) that lists posts published to your site on this day in years past.
@@ -58,6 +58,7 @@ The cron system for WordPress (which handles scheduled events, such as the sched
 == Changelog ==
 
 = () =
+* Change: Note compatibility through WP 5.1+
 * Change: Update copyright date (2019)
 * Change: Update License URI to be HTTPS
 
