@@ -8,6 +8,8 @@ class Years_Ago_Today_Test extends WP_UnitTestCase {
 		parent::tearDown();
 
 		remove_filter( 'c2c_years_ago_today-email-if-no-posts', '__return_true' );
+		remove_filter( 'c2c_years_ago_today-email-body-no-posts', array( $this, 'email_body_no_posts' ) );
+		remove_filter( 'c2c_years_ago_today-first_published_year', array( $this, 'first_published_year' ) );
 	}
 
 
@@ -29,6 +31,22 @@ class Years_Ago_Today_Test extends WP_UnitTestCase {
 		}
 
 		return $date;
+	}
+
+
+	//
+	//
+	// FUNCTIONS FOR HOOKING ACTIONS/FILTERS
+	//
+	//
+
+
+	public function email_body_no_posts( $text ) {
+		return 'Sorry, no posts were made on this day (%2$s) to %1$s in any prior year.';
+	}
+
+	public function first_published_year( $year ) {
+		return '2014';
 	}
 
 
@@ -289,4 +307,36 @@ HTML;
 		$this->assertEquals( $text, c2c_YearsAgoToday::add_user_email_footer( $user_id, 'Hi!' ) );
 	}
 
+	/*
+	 * Filter: c2c_years_ago_today-email-body-no-posts
+	 */
+
+	public function test_filter_email_body_no_posts() {
+		add_filter( 'c2c_years_ago_today-email-if-no-posts',  '__return_true' );
+		add_filter( 'c2c_years_ago_today-email-body-no-posts', array( $this, 'email_body_no_posts' ) );
+
+		$this->assertEquals(
+			sprintf(
+				'Sorry, no posts were made on this day (%s) to %s in any prior year.',
+				current_time( 'M jS' ),
+				'Test Blog'
+			),
+			c2c_YearsAgoToday::get_email_body()
+		);
+	}
+
+	/*
+	 * Filter :c2c_years_ago_today-first_published_year
+	 */
+
+	public function test_filter_first_published_year() {
+		$this->factory->post->create( array( 'post_date' => $this->get_date( '2012' ) ) );
+		$this->factory->post->create( array( 'post_date' => $this->get_date( '2014' ) ) );
+
+		$this->assertEquals( '2012', c2c_YearsAgoToday::get_first_published_year() );
+
+		add_filter( 'c2c_years_ago_today-first_published_year', array( $this, 'first_published_year' ) );
+
+		$this->assertEquals( '2014', c2c_YearsAgoToday::get_first_published_year() );
+	}
 }
