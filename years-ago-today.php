@@ -111,18 +111,9 @@ class c2c_YearsAgoToday {
 	 * @since 1.0
 	 */
 	public static function init() {
-		add_action( 'init', array( __CLASS__, 'do_init' ) );
-
 		register_activation_hook( __FILE__, array( __CLASS__, 'activate' ) );
 		register_deactivation_hook( __FILE__, array( __CLASS__, 'deactivate' ) );
-	}
 
-	/**
-	 * Performs initializations on the 'init' action.
-	 *
-	 * @since 1.0
-	 */
-	public static function do_init() {
 		// Load textdomain.
 		load_plugin_textdomain( 'years-ago-today' );
 
