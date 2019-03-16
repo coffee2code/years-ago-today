@@ -3,7 +3,7 @@ Contributors: coffee2code
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=6ARCFJ9TX3522
 Tags: dashboard, admin dashboard, on this day, past posts, history, dashboard widget, posts, coffee2code
 License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Requires at least: 4.6
 Tested up to: 4.9
 Stable tag: 1.2.2
@@ -56,6 +56,10 @@ The cron system for WordPress (which handles scheduled events, such as the sched
 
 
 == Changelog ==
+
+= () =
+* Change: Update copyright date (2019)
+* Change: Update License URI to be HTTPS
 
 = 1.2.2 (2017-11-08) =
 * New: Add README.md

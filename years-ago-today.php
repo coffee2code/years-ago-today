@@ -8,7 +8,7 @@
  * Text Domain: years-ago-today
  * Domain Path: /lang/
  * License:     GPLv2 or later
- * License URI: http://www.gnu.org/licenses/gpl-2.0.html
+ * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Description: Admin dashboard widget (and optional daily email) that lists posts published to your site on this day in years past.
  *
  * Compatible with WordPress 4.6 through 4.9+.
@@ -33,7 +33,7 @@
  */
 
 /*
-	Copyright (c) 2015-2018 by Scott Reilly (aka coffee2code)
+	Copyright (c) 2015-2019 by Scott Reilly (aka coffee2code)
 
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
