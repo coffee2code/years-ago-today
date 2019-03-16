@@ -194,15 +194,15 @@ class c2c_YearsAgoToday {
 		if ( ! $query->have_posts() && ! apply_filters( 'c2c_years_ago_today-email-if-no-posts', false ) ) {
 			$body = '';
 		}  elseif ( ! $query->have_posts() ) {
-			$body = apply_filters(
-				'c2c_years_ago_today-email-body-no-posts',
-				sprintf(
+			$body = sprintf(
+				apply_filters(
+					'c2c_years_ago_today-email-body-no-posts',
 					/* translators: 1: name of the site, 2: date string for today */
-					__( 'No posts were published to the site %1$s on <strong>%2$s</strong> in any past year.', 'years-ago-today' ),
-					$site_name,
-					/* translators: date string for today */
-					date_i18n( __( 'M jS' ), current_time( 'timestamp' ) )
-				)
+					__( 'No posts were published to the site %1$s on <strong>%2$s</strong> in any past year.', 'years-ago-today' )
+				),
+				$site_name,
+				/* translators: date string for today */
+				date_i18n( __( 'M jS' ), current_time( 'timestamp' ) )
 			);
 		} else {
 			// Build out email body.
