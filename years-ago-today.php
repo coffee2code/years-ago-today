@@ -178,6 +178,26 @@ class c2c_YearsAgoToday {
 	}
 
 	/**
+	 * Formats a timestamp according to the date format string to be used when
+	 * referring to the given day.
+	 *
+	 * @since 1.3.0
+	 *
+	 * @param string $time The timestamp to be formatted. Default is the current
+	 *                     time's timestamp.
+	 * @return string      The timestamp formatted according to the date format
+	 *                     string, which by default is "M jS".
+	 */
+	public static function get_formatted_date_string( $timestamp = '' ) {
+		if ( ! $timestamp || false === strtotime( $timestamp ) ) {
+			$timestamp = current_time( 'timestamp' );
+		}
+
+		/* translators: date string for today */
+		return date_i18n( __( 'M jS', 'years-ago-today' ), $timestamp );
+	}
+
+	/**
 	 * Returns the body of the daily email.
 	 *
 	 * @since 1.2
@@ -201,8 +221,7 @@ class c2c_YearsAgoToday {
 					__( 'No posts were published to the site %1$s on <strong>%2$s</strong> in any past year.', 'years-ago-today' )
 				),
 				$site_name,
-				/* translators: date string for today */
-				date_i18n( __( 'M jS', 'years-ago-today' ), current_time( 'timestamp' ) )
+				self::get_formatted_date_string()
 			);
 		} else {
 			// Build out email body.
@@ -216,8 +235,7 @@ class c2c_YearsAgoToday {
 				),
 				$query->post_count,
 				$site_name,
-				/* translators: date string for today */
-				date_i18n( __( 'M jS', 'years-ago-today' ), current_time( 'timestamp' ) )
+				self::get_formatted_date_string()
 			);
 
 			$year = '';
@@ -347,8 +365,7 @@ class c2c_YearsAgoToday {
 					'years-ago-today'
 				),
 				$q->post_count,
-				/* translators: date string for today */
-				date_i18n( __( 'M jS', 'years-ago-today' ), current_time( 'timestamp' ) )
+				self::get_formatted_date_string()
 			);
 			echo '</p>';
 			echo '<ul class="years-ago-today-posts">';
@@ -370,8 +387,7 @@ class c2c_YearsAgoToday {
 			printf(
 				/* translators: %s: date string for today */
 				__( 'No posts were published on <strong>%s</strong> from any past year.', 'years-ago-today' ),
-				/* translators: date string for today */
-				date_i18n( __( 'M jS', 'years-ago-today' ), current_time( 'timestamp' ) )
+				self::get_formatted_date_string()
 			);
 			echo '</p>';
 		endif;

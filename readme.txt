@@ -123,6 +123,7 @@ add_filter( 'c2c_years_ago_today-first_published_year', function ( $year ) { ret
 == Changelog ==
 
 = () =
+* New: Add and use `get_formatted_date_string()` to format the date string used when referring to a given day
 * New: Add unit tests for untested hooks
 * New: Add CHANGELOG.md file and move all but most recent changelog entries into it
 * New: Add "Hooks" section to readme.txt to document hooks provided by the plugin

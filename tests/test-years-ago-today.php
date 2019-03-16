@@ -178,6 +178,20 @@ class Years_Ago_Today_Test extends WP_UnitTestCase {
 	}
 
 	/*
+	 * get_formatted_date_string()
+	 */
+
+	public function test_get_formatted_date_string() {
+		$this->assertEquals( date_i18n( 'M jS', current_time( 'timestamp' ) ), c2c_YearsAgoToday::get_formatted_date_string() );
+	}
+
+	public function test_get_formatted_date_string_with_timestamp() {
+		$timestamp = current_time( '2012-11-12' );
+
+		$this->assertEquals( date_i18n( 'M jS', $timestamp ), c2c_YearsAgoToday::get_formatted_date_string( $timestamp ) );
+	}
+
+	/*
 	 * get_first_published_year()
 	 */
 
