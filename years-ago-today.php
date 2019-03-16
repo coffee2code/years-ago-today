@@ -530,6 +530,6 @@ class c2c_YearsAgoToday {
 
 } // end c2c_YearsAgoToday
 
-c2c_YearsAgoToday::init();
+add_action( 'plugins_loaded', array( 'c2c_YearsAgoToday', 'init' ) );
 
 endif; // end if !class_exists()
