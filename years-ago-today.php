@@ -202,7 +202,7 @@ class c2c_YearsAgoToday {
 				),
 				$site_name,
 				/* translators: date string for today */
-				date_i18n( __( 'M jS' ), current_time( 'timestamp' ) )
+				date_i18n( __( 'M jS', 'years-ago-today' ), current_time( 'timestamp' ) )
 			);
 		} else {
 			// Build out email body.
@@ -217,7 +217,7 @@ class c2c_YearsAgoToday {
 				$query->post_count,
 				$site_name,
 				/* translators: date string for today */
-				date_i18n( __( 'M jS' ), current_time( 'timestamp' ) )
+				date_i18n( __( 'M jS', 'years-ago-today' ), current_time( 'timestamp' ) )
 			);
 
 			$year = '';
@@ -348,7 +348,7 @@ class c2c_YearsAgoToday {
 				),
 				$q->post_count,
 				/* translators: date string for today */
-				date_i18n( __( 'M jS' ), current_time( 'timestamp' ) )
+				date_i18n( __( 'M jS', 'years-ago-today' ), current_time( 'timestamp' ) )
 			);
 			echo '</p>';
 			echo '<ul class="years-ago-today-posts">';
@@ -371,7 +371,7 @@ class c2c_YearsAgoToday {
 				/* translators: %s: date string for today */
 				__( 'No posts were published on <strong>%s</strong> from any past year.', 'years-ago-today' ),
 				/* translators: date string for today */
-				date_i18n( __( 'M jS' ), current_time( 'timestamp' ) )
+				date_i18n( __( 'M jS', 'years-ago-today' ), current_time( 'timestamp' ) )
 			);
 			echo '</p>';
 		endif;
