@@ -133,6 +133,7 @@ add_filter( 'c2c_years_ago_today-first_published_year', function ( $year ) { ret
 * Change: Do placeholder substitutions of site name and day strings after `c2c_years_ago_today-email-body-no-posts` filter is run, so those using the hook have those values available
 * Change: Reformat conditional logic handling in `get_email_body()` for improved readability
 * Change: Allow date strings to be translated in a plugin-specific way
+* CHange: Cast return value of `c2c_years_ago_today-email-if-no-posts` filter as boolean
 * Change: Split paragraph in README.md's "Support" section into two
 * Change: Note compatibility through WP 5.1+
 * Change: Update copyright date (2019)

@@ -227,7 +227,7 @@ class c2c_YearsAgoToday {
 			 *
 			 * @param string $send Send daily email if there are no posts? Default false.
 			 */
-			$send_email_when_no_posts = apply_filters( 'c2c_years_ago_today-email-if-no-posts', false );
+			$send_email_when_no_posts = (bool) apply_filters( 'c2c_years_ago_today-email-if-no-posts', false );
 
 			// Define an email body if sending email despite not having posts.
 			if ( $send_email_when_no_posts ) {
