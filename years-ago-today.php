@@ -450,9 +450,9 @@ class c2c_YearsAgoToday {
 		 *
 		 * @since 1.0.0
 		 *
-		 * @param int|false The year for the earlier published post. A value of
-		 *                  `false` forces the actual value to be queried from the
-		 *                  database. Default false.
+		 * @param string|false The year for the earlier published post. A value of
+		 *                     `false` forces the actual value to be queried from the
+		 *                     database. Default false.
 		 */
 		$first_year = apply_filters( 'c2c_years_ago_today-first_published_year', false );
 
