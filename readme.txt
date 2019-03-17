@@ -127,6 +127,7 @@ add_filter( 'c2c_years_ago_today-first_published_year', function ( $year ) { ret
 * New: Add unit tests for untested hooks
 * New: Add CHANGELOG.md file and move all but most recent changelog entries into it
 * New: Add "Hooks" section to readme.txt to document hooks provided by the plugin
+* New: Add inline documentation for all hooks
 * Change: Initialize plugin on 'plugins_loaded' action instead of on load
 * Change: Merge `do_init()` into `init()`
 * Change: Do placeholder substitutions of site name and day strings after `c2c_years_ago_today-email-body-no-posts` filter is run, so those using the hook have those values available

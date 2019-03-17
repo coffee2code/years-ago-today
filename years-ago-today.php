@@ -142,7 +142,14 @@ class c2c_YearsAgoToday {
 	 */
 	public static function activate() {
 		if ( ! wp_next_scheduled( self::$cron_name ) ) {
-			// Schedule the sending of the emails.
+			/**
+			 * Filters the time of the day that the daily Years Ago Today email is sent.
+			 *
+			 * @since 1.1.0
+			 *
+			 * @param string $time The time of day to email the Years Ago Today email to
+			 *                     those who have opted-in to it. Default "9:00 am".
+			 */
 			$time = apply_filters( 'c2c_years_ago_today-email_cron_time', '9:00 am' );
 			$timestamp = ( strtotime( $time ) > time() ) ? strtotime( $time ) : strtotime( 'tomorrow ' . $time );
 
@@ -212,11 +219,30 @@ class c2c_YearsAgoToday {
 
 		// If there are no posts to include in the email.
 		if ( ! $query->have_posts() ) {
+			/**
+			 * Filters if the daily Years Ago Today email is sent out on days that don't
+			 * have any published posts in prior years.
+			 *
+			 * @since 1.0.0
+			 *
+			 * @param string $send Send daily email if there are no posts? Default false.
+			 */
 			$send_email_when_no_posts = apply_filters( 'c2c_years_ago_today-email-if-no-posts', false );
 
 			// Define an email body if sending email despite not having posts.
 			if ( $send_email_when_no_posts ) {
 				$body = sprintf(
+					/**
+					 * Filters the email body for daily Years Ago Today email when no posts
+					 * have been published in prior years.
+					 *
+					 * @since 1.0.0
+					 *
+					 * @param string $email_body The body of the email. Use "%1$s" as a
+					 *                           placeholder for site name and "%2$s" for date.
+					 *                           Default 'No posts were published to the site
+					 *                           %1$s on <strong>%2$s</strong> in any past year.'.
+					 */
 					apply_filters(
 						'c2c_years_ago_today-email-body-no-posts',
 						/* translators: 1: name of the site, 2: date string for today */
@@ -412,7 +438,22 @@ class c2c_YearsAgoToday {
 	public static function get_first_published_year() {
 		global $wpdb;
 
-		// Allow a year to be provided via a filter.
+		/**
+		 * Filters the year of the earliest published post.
+		 *
+		 * By default this is false, which causes the plugin to determine the earliest
+		 * year via a database query. The queried value does get cached, though may
+		 * not persist depending on your site setup. This filter can be used to
+		 * prevent the need for the query or to set a year later than the earliest
+		 * published year (in case you'd prefer not to feature or be reminded of the
+		 * early years).
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param int|false The year for the earlier published post. A value of
+		 *                  `false` forces the actual value to be queried from the
+		 *                  database. Default false.
+		 */
 		$first_year = apply_filters( 'c2c_years_ago_today-first_published_year', false );
 
 		// If not provided via filter, try to get it from the cache.
