@@ -30,6 +30,11 @@
  * - Add way to filter by author.
  * - Allow post listing template to be overridden.
  * - Add widget for front-end use.
+ * - In get_first_published_year()/get_posts():
+ *   - Don't use hardcoded post statuses of 'publish' and 'private'. Include  latter only if user has relevant caps.
+ *   - Make the statuses filterable for custom post status support.
+ *   - Make the post types filterable (and expand default to public post types)
+ * - In cron_email(), improve handling for sending large number of emails.
  */
 
 /*
