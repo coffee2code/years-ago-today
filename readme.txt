@@ -61,7 +61,7 @@ The plugin exposes four filters for hooking. Code using this filter should ideal
 
 **c2c_years_ago_today-email_cron_time (filter)**
 
-The 'c2c_years_ago_today-email_cron_time' hook allows you to a custom time of day to email the Years Ago Today email to those who have opted-in to it. By default this is "9:00 am".
+The 'c2c_years_ago_today-email_cron_time' hook allows you to customize the time of day to email the Years Ago Today email to those who have opted-in to it. By default this is "9:00 am".
 
 Arguments:
 
@@ -106,7 +106,7 @@ add_filter( 'c2c_years_ago_today-email-body-no-posts', function ( $text ) { retu
 
 **c2c_years_ago_today-first_published_year (filter)**
 
-The 'c2c_years_ago_today-first_published_year' filter allows specifying the year of the earliest published post. By default this is false, which causes the plugin to determine the first year via a database query. The queried value does get cached, though may not persist depending on your site setup. This can be used to prevent the need for the query or to set a year later than the earliest published year (in case you'd prefer not to feature or be reminded of the early years).
+The 'c2c_years_ago_today-first_published_year' filter allows specifying the year of the earliest published post. By default this is false, which causes the plugin to determine the earliest year via a database query. The queried value does get cached, though may not persist depending on your site setup. This filter can be used to prevent the need for the query or to set a year later than the earliest published year (in case you'd prefer not to feature or be reminded of the early years).
 
 Arguments:
 
