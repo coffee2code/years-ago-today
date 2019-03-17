@@ -210,20 +210,29 @@ class c2c_YearsAgoToday {
 
 		$site_name = wp_specialchars_decode( get_option('blogname'), ENT_QUOTES );
 
-		// If there were no posts, check a filter to see if an email shouldn't be sent.
-		if ( ! $query->have_posts() && ! apply_filters( 'c2c_years_ago_today-email-if-no-posts', false ) ) {
-			$body = '';
-		}  elseif ( ! $query->have_posts() ) {
-			$body = sprintf(
-				apply_filters(
-					'c2c_years_ago_today-email-body-no-posts',
-					/* translators: 1: name of the site, 2: date string for today */
-					__( 'No posts were published to the site %1$s on <strong>%2$s</strong> in any past year.', 'years-ago-today' )
-				),
-				$site_name,
-				self::get_formatted_date_string()
-			);
-		} else {
+		// If there are no posts to include in the email.
+		if ( ! $query->have_posts() ) {
+			$send_email_when_no_posts = apply_filters( 'c2c_years_ago_today-email-if-no-posts', false );
+
+			// Define an email body if sending email despite not having posts.
+			if ( $send_email_when_no_posts ) {
+				$body = sprintf(
+					apply_filters(
+						'c2c_years_ago_today-email-body-no-posts',
+						/* translators: 1: name of the site, 2: date string for today */
+						__( 'No posts were published to the site %1$s on <strong>%2$s</strong> in any past year.', 'years-ago-today' )
+					),
+					$site_name,
+					self::get_formatted_date_string()
+				);
+			}
+			// Else don't define an email body.
+			else {
+				$body = '';
+			}
+		}
+		// Else there are posts to include in the email.
+		else {
 			// Build out email body.
 			$body = sprintf(
 				/* translators: 1: number of posts, 2: site name, 3: date string for today */
