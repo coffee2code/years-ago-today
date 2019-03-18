@@ -1,5 +1,22 @@
 # Changelog
 
+## 1.3 _(2019-03-17)_
+* New: Add and use `get_formatted_date_string()` to format the date string used when referring to a given day
+* New: Add unit tests for untested hooks
+* New: Add CHANGELOG.md file and move all but most recent changelog entries into it
+* New: Add "Hooks" section to readme.txt to document hooks provided by the plugin
+* New: Add inline documentation for all hooks
+* Change: Initialize plugin on 'plugins_loaded' action instead of on load
+* Change: Merge `do_init()` into `init()`
+* Change: Do placeholder substitutions of site name and day strings after `c2c_years_ago_today-email-body-no-posts` filter is run, so those using the hook have those values available
+* Change: Reformat conditional logic handling in `get_email_body()` for improved readability
+* Change: Allow date strings to be translated in a plugin-specific way
+* CHange: Cast return value of `c2c_years_ago_today-email-if-no-posts` filter as boolean
+* Change: Split paragraph in README.md's "Support" section into two
+* Change: Note compatibility through WP 5.1+
+* Change: Update copyright date (2019)
+* Change: Update License URI to be HTTPS
+
 ## 1.2.2 _(2017-11-08)_
 * New: Add README.md
 * Change: Add GitHub link to readme
