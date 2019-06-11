@@ -6,7 +6,6 @@
  * Author:      Scott Reilly
  * Author URI:  http://coffee2code.com/
  * Text Domain: years-ago-today
- * Domain Path: /lang/
  * License:     GPLv2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Description: Admin dashboard widget (and optional daily email) that lists posts published to your site on this day in years past.

@@ -2,6 +2,7 @@
 
 ## _(in-progress)_
 * Change: Note compatibility through WP 5.2+
+* Change: Remove 'Domain Path' plugin header
 * Fix: Correct typo in GitHub URL
 
 ## 1.3 _(2019-03-17)_
