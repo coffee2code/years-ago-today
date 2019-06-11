@@ -6,7 +6,7 @@ License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Requires at least: 4.6
 Tested up to: 5.2
-Stable tag: 1.3
+Stable tag: 1.3.1
 
 Admin dashboard widget (and optional daily email) that lists posts published to your site on this day in years past.
 
@@ -122,6 +122,14 @@ add_filter( 'c2c_years_ago_today-first_published_year', function ( $year ) { ret
 
 == Changelog ==
 
+= 1.3.1 (2019-06-10) =
+* Fix: Fix incorect handling of timestamp argument when supplied to `get_formatted_date_string()` (bug not triggered within plugin itself)
+* Change: Update unit test install script and bootstrap to use latest WP unit test repo
+* Change: Note compatibility through WP 5.2+
+* Change: Add link to CHANGELOG.md in README.md
+* Change: Remove 'Domain Path' plugin header
+* Fix: Correct typo in GitHub URL
+
 = 1.3 (2019-03-17) =
 * New: Add and use `get_formatted_date_string()` to format the date string used when referring to a given day
 * New: Add unit tests for untested hooks
@@ -146,13 +154,13 @@ add_filter( 'c2c_years_ago_today-first_published_year', function ( $year ) { ret
 * Change: Update copyright date (2018)
 * Change: Minor whitespace tweaks in unit test bootstrap
 
-= 1.2.1 (2017-05-09) =
-* Fix: Properly constrain CSS `li` styling to apply only to plugin's dashboard widget and not any other dashboard widgets
-
 _Full changelog is available in [CHANGELOG.md](CHANGELOG.md)._
 
 
 == Upgrade Notice ==
+
+= 1.3.1 =
+Trivial update: modernized unit tests, noted compatibility through WP 5.2+
 
 = 1.3 =
 Recommended update: tweaked plugin initialization process, minor filter and string translation improvements, created CHANGELOG.md to store historical changelog outside of readme.txt, noted compatibility through WP 5.1+, updated copyright date (2019)

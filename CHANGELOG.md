@@ -1,6 +1,6 @@
 # Changelog
 
-## _(in-progress)_
+## 1.3.1 _(2019-06-10)_
 * Fix: Fix incorect handling of timestamp argument when supplied to `get_formatted_date_string()` (bug not triggered within plugin itself)
 * Change: Update unit test install script and bootstrap to use latest WP unit test repo
 * Change: Note compatibility through WP 5.2+

@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Years Ago Today
- * Version:     1.3
+ * Version:     1.3.1
  * Plugin URI:  http://coffee2code.com/wp-plugins/years-ago-today/
  * Author:      Scott Reilly
  * Author URI:  http://coffee2code.com/
@@ -18,7 +18,7 @@
  *
  * @package Years_Ago_Today
  * @author  Scott Reilly
- * @version 1.3
+ * @version 1.3.1
  */
 
 /*
@@ -28,7 +28,7 @@
  * - Add cap to control what users can get the daily email?
  * - Add way to filter by author.
  * - Allow post listing template to be overridden.
- * - Add widget for front-end use.
+ * - Add widget for front-end use. (!! MULTIPLE REQUESTS !!)
  * - In get_first_published_year()/get_posts():
  *   - Don't use hardcoded post statuses of 'publish' and 'private'. Include  latter only if user has relevant caps.
  *   - Make the statuses filterable for custom post status support.
@@ -106,7 +106,7 @@ class c2c_YearsAgoToday {
 	 * @since 1.0
 	 */
 	public static function version() {
-		return '1.3';
+		return '1.3.1';
 	}
 
 	/**
