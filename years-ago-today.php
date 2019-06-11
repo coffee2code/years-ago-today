@@ -200,7 +200,7 @@ class c2c_YearsAgoToday {
 	 *                     string, which by default is "M jS".
 	 */
 	public static function get_formatted_date_string( $timestamp = '' ) {
-		if ( ! $timestamp || false === strtotime( $timestamp ) ) {
+		if ( ! $timestamp ) {
 			$timestamp = current_time( 'timestamp' );
 		}
 
