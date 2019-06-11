@@ -2,6 +2,7 @@
 
 ## _(in-progress)_
 * Change: Note compatibility through WP 5.2+
+* Change: Add link to CHANGELOG.md in README.md
 * Change: Remove 'Domain Path' plugin header
 * Fix: Correct typo in GitHub URL
 
