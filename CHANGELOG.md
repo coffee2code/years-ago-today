@@ -1,5 +1,8 @@
 # Changelog
 
+## _(in-progress)_
+* Change: Note compatibility through WP 5.2+
+
 ## 1.3 _(2019-03-17)_
 * New: Add and use `get_formatted_date_string()` to format the date string used when referring to a given day
 * New: Add unit tests for untested hooks
