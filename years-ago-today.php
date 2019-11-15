@@ -498,9 +498,8 @@ class c2c_YearsAgoToday {
 		$current_year = mysql2date( 'Y', current_time( 'mysql' ) );
 
 		$years = range( $first_year, $current_year - 1 );
-		$now   = current_time( 'timestamp' );
-		$month = mysql2date( 'm', $now );
-		$day   = mysql2date( 'd', $now );
+		$month = current_time( 'm' );
+		$day   = current_time( 'd' );
 
 		$query = new WP_Query( array(
 			'post_parent'    => '',
