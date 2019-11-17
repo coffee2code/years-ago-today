@@ -6,7 +6,7 @@ License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Requires at least: 4.6
 Tested up to: 5.3
-Stable tag: 1.3.1
+Stable tag: 1.3.2
 
 Admin dashboard widget (and optional daily email) that lists posts published to your site on this day in years past.
 
@@ -122,6 +122,11 @@ add_filter( 'c2c_years_ago_today-first_published_year', function ( $year ) { ret
 
 == Changelog ==
 
+= 1.3.2 (2019-11-16) =
+* Fix: Fix incorrect date query handling
+* Change: Note compatibility through WP 5.3+
+* Change: Update copyright date (2020)
+
 = 1.3.1 (2019-06-10) =
 * Fix: Fix incorect handling of timestamp argument when supplied to `get_formatted_date_string()` (bug not triggered within plugin itself)
 * Change: Update unit test install script and bootstrap to use latest WP unit test repo
@@ -147,17 +152,13 @@ add_filter( 'c2c_years_ago_today-first_published_year', function ( $year ) { ret
 * Change: Update copyright date (2019)
 * Change: Update License URI to be HTTPS
 
-= 1.2.2 (2017-11-08) =
-* New: Add README.md
-* Change: Add GitHub link to readme
-* Change: Note compatibility through WP 4.9+
-* Change: Update copyright date (2018)
-* Change: Minor whitespace tweaks in unit test bootstrap
-
 _Full changelog is available in [CHANGELOG.md](CHANGELOG.md)._
 
 
 == Upgrade Notice ==
+
+= 1.3.2 =
+Bugfix update: fixed bug causing unrelated posts to be listed, noted compatibility through WP 5.3+, updated copyright date (2020)
 
 = 1.3.1 =
 Trivial update: modernized unit tests, noted compatibility through WP 5.2+
