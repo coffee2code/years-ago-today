@@ -4,15 +4,6 @@ defined( 'ABSPATH' ) or die();
 
 class Years_Ago_Today_Test extends WP_UnitTestCase {
 
-	public function tearDown() {
-		parent::tearDown();
-
-		remove_filter( 'c2c_years_ago_today-email-if-no-posts', '__return_true' );
-		remove_filter( 'c2c_years_ago_today-email-body-no-posts', array( $this, 'email_body_no_posts' ) );
-		remove_filter( 'c2c_years_ago_today-first_published_year', array( $this, 'first_published_year' ) );
-	}
-
-
 	//
 	// HELPER FUNCTIONS
 	//
