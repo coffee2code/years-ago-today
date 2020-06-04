@@ -14,7 +14,7 @@ Admin dashboard widget (and optional daily email) that lists posts published to 
 
 This plugin provides a simply admin dashboard widget that lists all of the posts published to your site on this day in years past. Users have the option (via their profiles) to opt into receiving a daily email that provides a listing and links to all of the posts published to your site on this day in years past.
 
-Links: [Plugin Homepage](http://coffee2code.com/wp-plugins/years-ago-today/) | [Plugin Directory Page](https://wordpress.org/plugins/years-ago-today/) | [GitHub](https://github.com/coffee2code/years-ago-today/) | [Author Homepage](http://coffee2code.com/)
+Links: [Plugin Homepage](https://coffee2code.com/wp-plugins/years-ago-today/) | [Plugin Directory Page](https://wordpress.org/plugins/years-ago-today/) | [GitHub](https://github.com/coffee2code/years-ago-today/) | [Author Homepage](https://coffee2code.com/)
 
 
 == Installation ==
