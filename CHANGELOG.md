@@ -1,5 +1,8 @@
 # Changelog
 
+## _(in-progress)_
+* Change: Note compatibility through WP 5.4+
+
 ## 1.3.2 _(2019-11-16)_
 * Fix: Fix incorrect date query handling
 * Change: Note compatibility through WP 5.3+
