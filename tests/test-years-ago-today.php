@@ -356,6 +356,18 @@ HTML;
 	}
 
 	/*
+	 * add_admin_css()
+	 */
+
+	public function test_add_admin_css() {
+		$this->assertFalse( has_action( 'admin_head', array( 'c2c_YearsAgoToday', 'admin_css' ) ) );
+
+		c2c_YearsAgoToday::add_admin_css();
+
+		$this->assertEquals( 10, has_action( 'admin_head', array( 'c2c_YearsAgoToday', 'admin_css' ) ) );
+	}
+
+	/*
 	 * Filter: c2c_years_ago_today-email-body-no-posts
 	 */
 
