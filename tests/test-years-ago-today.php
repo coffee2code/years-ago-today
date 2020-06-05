@@ -42,7 +42,27 @@ class Years_Ago_Today_Test extends WP_UnitTestCase {
 
 
 	//
+	//
+	// DATA PROVIDERS
+	//
+	//
+
+
+	public static function get_default_hooks() {
+		return array(
+			array( 'action', 'wp_dashboard_setup',       'dashboard_setup',                10 ),
+			array( 'action', 'profile_personal_options', 'add_daily_email_optin_checkbox', 10 ),
+			array( 'action', 'personal_options_update',  'option_save',                    10 ),
+			array( 'action', 'c2c_years_ago_daily_cron', 'cron_email',                     10 ),
+			array( 'action', 'load-index.php',           'add_admin_css',                  10 ),
+		);
+	}
+
+
+	//
+	//
 	// TESTS
+	//
 	//
 
 
@@ -52,6 +72,26 @@ class Years_Ago_Today_Test extends WP_UnitTestCase {
 
 	public function test_class_is_available() {
 		$this->assertTrue( class_exists( 'c2c_YearsAgoToday' ) );
+	}
+
+	public function test_plugins_loaded_action_triggers_do_init() {
+		$this->assertNotFalse( has_filter( 'plugins_loaded', array( 'c2c_YearsAgoToday', 'init' ) ) );
+	}
+
+	/**
+	 * @dataProvider get_default_hooks
+	 */
+	public function test_default_hooks( $hook_type, $hook, $function, $priority, $class_method = true ) {
+		$callback = $class_method ? array( 'c2c_YearsAgoToday', $function ) : $function;
+
+		$prio = $hook_type === 'action' ?
+			has_action( $hook, $callback ) :
+			has_filter( $hook, $callback );
+
+		$this->assertNotFalse( $prio );
+		if ( $priority ) {
+			$this->assertEquals( $priority, $prio );
+		}
 	}
 
 	public function test_cron_task_is_created() {
