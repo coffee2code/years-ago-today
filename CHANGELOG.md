@@ -6,6 +6,7 @@
 * Change: Update links to coffee2code.com to be HTTPS
 * Unit tests:
     * New: Add test and data provider for hooking actions and filters
+    * New: Add tests for configuration defaults such as option name, cron name, etc
     * Change: Use `expectOutputRegex()` instead of doing explicit output buffering
     * Change: Remove unnecessary unregistering of hooks and thusly delete `tearDown()`
     * Change: Use HTTPS for link to WP SVN repository in bin script for configuring unit tests

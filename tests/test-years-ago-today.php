@@ -74,6 +74,18 @@ class Years_Ago_Today_Test extends WP_UnitTestCase {
 		$this->assertTrue( class_exists( 'c2c_YearsAgoToday' ) );
 	}
 
+	public function test_default_option_name() {
+		$this->assertEquals( 'c2c_years_ago_today_daily_email_optin', c2c_YearsAgoToday::$option_name );
+	}
+
+	public function test_default_cron_name() {
+		$this->assertEquals( 'c2c_years_ago_daily_cron', c2c_YearsAgoToday::$cron_name );
+	}
+
+	public function test_default_enabled_option_value() {
+		$this->assertEquals( '1', c2c_YearsAgoToday::$enabled_option_value );
+	}
+
 	public function test_plugins_loaded_action_triggers_do_init() {
 		$this->assertNotFalse( has_filter( 'plugins_loaded', array( 'c2c_YearsAgoToday', 'init' ) ) );
 	}
