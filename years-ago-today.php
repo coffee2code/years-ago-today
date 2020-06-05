@@ -22,21 +22,6 @@
  */
 
 /*
- * TODO:
- * - Put CSS in .css file.
- * - Show more info about post in widget, such as author (if on multi-author site). (Maybe hide by default and show on hover.)
- * - Add cap to control what users can get the daily email?
- * - Add way to filter by author.
- * - Allow post listing template to be overridden.
- * - Add widget for front-end use. (!! MULTIPLE REQUESTS !!)
- * - In get_first_published_year()/get_posts():
- *   - Don't use hardcoded post statuses of 'publish' and 'private'. Include  latter only if user has relevant caps.
- *   - Make the statuses filterable for custom post status support.
- *   - Make the post types filterable (and expand default to public post types)
- * - In cron_email(), improve handling for sending large number of emails.
- */
-
-/*
 	Copyright (c) 2015-2020 by Scott Reilly (aka coffee2code)
 
 	This program is free software; you can redistribute it and/or
