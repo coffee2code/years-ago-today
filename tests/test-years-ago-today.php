@@ -108,12 +108,9 @@ class Years_Ago_Today_Test extends WP_UnitTestCase {
 		// Extra non-matching post
 		$this->factory->post->create( array( 'post_date' => $this->get_date( '2015', false ) ) );
 
-		ob_start();
-		c2c_YearsAgoToday::wp_dashboard_years_ago_today();
-		$out = ob_get_contents();
-		ob_end_clean();
+		$expected = 'No posts were published on <strong>' . current_time( 'M jS' ) . '</strong> from any past year.';
 
-		$this->assertContains( 'No posts were published on <strong>' . current_time( 'M jS' ) . '</strong> from any past year.', $out );
+		$this->expectOutputRegex( '~' . preg_quote( $expected ) . '~', c2c_YearsAgoToday::wp_dashboard_years_ago_today() );
 	}
 
 	public function test_shows_singular_message_with_single_matching_past_year_posts() {
@@ -121,12 +118,9 @@ class Years_Ago_Today_Test extends WP_UnitTestCase {
 		// Extra non-matching post
 		$this->factory->post->create( array( 'post_date' => $this->get_date( '2015', false ) ) );
 
-		ob_start();
-		c2c_YearsAgoToday::wp_dashboard_years_ago_today();
-		$out = ob_get_contents();
-		ob_end_clean();
+		$expected = '<strong>1</strong> post has been published on <strong>' . current_time( 'M jS' ) . '</strong> in a previous year:';
 
-		$this->assertContains( '<strong>1</strong> post has been published on <strong>' . current_time( 'M jS' ) . '</strong> in a previous year:', $out );
+		$this->expectOutputRegex( '~' . preg_quote( $expected ) . '~', c2c_YearsAgoToday::wp_dashboard_years_ago_today() );
 	}
 
 	public function test_shows_plural_message_with_multiple_matching_past_year_posts() {
@@ -135,12 +129,9 @@ class Years_Ago_Today_Test extends WP_UnitTestCase {
 		// Extra non-matching post
 		$this->factory->post->create( array( 'post_date' => $this->get_date( '2015', false ) ) );
 
-		ob_start();
-		c2c_YearsAgoToday::wp_dashboard_years_ago_today();
-		$out = ob_get_contents();
-		ob_end_clean();
+		$expected = '<strong>2</strong> posts have been published on <strong>' . current_time( 'M jS' ) . '</strong> in previous years:';
 
-		$this->assertContains( '<strong>2</strong> posts have been published on <strong>' . current_time( 'M jS' ) . '</strong> in previous years:', $out );
+		$this->expectOutputRegex( '~' . preg_quote( $expected ) . '~', c2c_YearsAgoToday::wp_dashboard_years_ago_today() );
 	}
 
 	/*
