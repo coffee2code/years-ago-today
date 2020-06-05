@@ -368,6 +368,24 @@ HTML;
 	}
 
 	/*
+	 * admin_css()
+	 */
+
+	public function test_admin_css() {
+		$expected = "<style type='text/css'>
+			#dashboard-widgets .years-ago-today-posts h4 {
+				font-weight: bold;
+			}
+			#dashboard-widgets .years-ago-today-posts li:not(.years-ago-today-year) {
+				margin-left: 30px;
+				list-style: initial;
+			}
+		</style>\n";
+
+		$this->expectOutputRegex( '~^' . preg_quote( $expected ) . '$~', c2c_YearsAgoToday::admin_css() );
+	}
+
+	/*
 	 * Filter: c2c_years_ago_today-email-body-no-posts
 	 */
 
