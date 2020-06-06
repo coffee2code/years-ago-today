@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Years Ago Today
- * Version:     1.3.2
+ * Version:     1.3.3
  * Plugin URI:  https://coffee2code.com/wp-plugins/years-ago-today/
  * Author:      Scott Reilly
  * Author URI:  https://coffee2code.com/
@@ -18,7 +18,7 @@
  *
  * @package Years_Ago_Today
  * @author  Scott Reilly
- * @version 1.3.2
+ * @version 1.3.3
  */
 
 /*
@@ -91,7 +91,7 @@ class c2c_YearsAgoToday {
 	 * @since 1.0
 	 */
 	public static function version() {
-		return '1.3.2';
+		return '1.3.3';
 	}
 
 	/**

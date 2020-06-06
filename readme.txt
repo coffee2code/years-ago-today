@@ -6,7 +6,7 @@ License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Requires at least: 4.6
 Tested up to: 5.4
-Stable tag: 1.3.2
+Stable tag: 1.3.3
 
 Admin dashboard widget (and optional daily email) that lists posts published to your site on this day in years past.
 
@@ -122,6 +122,19 @@ add_filter( 'c2c_years_ago_today-first_published_year', function ( $year ) { ret
 
 == Changelog ==
 
+= 1.3.3 (2020-06-05) =
+* New: Add TODO.md and move existing TODO list from top of main plugin file into it (and added to it)
+* Change: Note compatibility through WP 5.4+
+* Change: Update links to coffee2code.com to be HTTPS
+* Fix: Use full path to CHANGELOG.md in the Changelog section of readme.txt
+* Unit tests:
+    * New: Add test and data provider for hooking actions and filters
+    * New: Add tests for configuration defaults such as option name, cron name, etc
+    * New: Add tests for `add_admin_css()`, `admin_css()`
+    * Change: Use `expectOutputRegex()` instead of doing explicit output buffering
+    * Change: Remove unnecessary unregistering of hooks and thusly delete `tearDown()`
+    * Change: Use HTTPS for link to WP SVN repository in bin script for configuring unit tests
+
 = 1.3.2 (2019-11-16) =
 * Fix: Fix incorrect date query handling
 * Change: Note compatibility through WP 5.3+
@@ -135,27 +148,13 @@ add_filter( 'c2c_years_ago_today-first_published_year', function ( $year ) { ret
 * Change: Remove 'Domain Path' plugin header
 * Fix: Correct typo in GitHub URL
 
-= 1.3 (2019-03-17) =
-* New: Add and use `get_formatted_date_string()` to format the date string used when referring to a given day
-* New: Add unit tests for untested hooks
-* New: Add CHANGELOG.md file and move all but most recent changelog entries into it
-* New: Add "Hooks" section to readme.txt to document hooks provided by the plugin
-* New: Add inline documentation for all hooks
-* Change: Initialize plugin on 'plugins_loaded' action instead of on load
-* Change: Merge `do_init()` into `init()`
-* Change: Do placeholder substitutions of site name and day strings after `c2c_years_ago_today-email-body-no-posts` filter is run, so those using the hook have those values available
-* Change: Reformat conditional logic handling in `get_email_body()` for improved readability
-* Change: Allow date strings to be translated in a plugin-specific way
-* CHange: Cast return value of `c2c_years_ago_today-email-if-no-posts` filter as boolean
-* Change: Split paragraph in README.md's "Support" section into two
-* Change: Note compatibility through WP 5.1+
-* Change: Update copyright date (2019)
-* Change: Update License URI to be HTTPS
-
 _Full changelog is available in [CHANGELOG.md](https://github.com/coffee2code/years-ago-today/blob/master/CHANGELOG.md)._
 
 
 == Upgrade Notice ==
+
+= 1.3.3 =
+Trivial update: added TODO.md file, updated a few URLs to be HTTPS, expanded unit testing, and noted compatibility through WP 5.4+
 
 = 1.3.2 =
 Bugfix update: fixed bug causing unrelated posts to be listed, noted compatibility through WP 5.3+, updated copyright date (2020)
