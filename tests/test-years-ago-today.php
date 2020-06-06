@@ -106,6 +106,10 @@ class Years_Ago_Today_Test extends WP_UnitTestCase {
 		}
 	}
 
+	/*
+	 * Cron
+	 */
+
 	public function test_cron_task_is_created() {
 		c2c_YearsAgoToday::activate();
 
