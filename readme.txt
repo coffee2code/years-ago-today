@@ -152,7 +152,7 @@ add_filter( 'c2c_years_ago_today-first_published_year', function ( $year ) { ret
 * Change: Update copyright date (2019)
 * Change: Update License URI to be HTTPS
 
-_Full changelog is available in [CHANGELOG.md](CHANGELOG.md)._
+_Full changelog is available in [CHANGELOG.md](https://github.com/coffee2code/years-ago-today/blob/master/CHANGELOG.md)._
 
 
 == Upgrade Notice ==
