@@ -6,7 +6,7 @@ License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Requires at least: 4.6
 Tested up to: 5.5
-Stable tag: 1.3.3
+Stable tag: 1.3.4
 
 Admin dashboard widget (and optional daily email) that lists posts published to your site on this day in years past.
 
@@ -122,6 +122,17 @@ add_filter( 'c2c_years_ago_today-first_published_year', function ( $year ) { ret
 
 == Changelog ==
 
+= 1.3.4 (2020-09-14) =
+* Change: Remove some excess space characters within output markup
+* Change: Restructure unit test file structure
+    * New: Create new subdirectory `phpunit/` to house all files related to unit testing
+    * Change: Move `bin/` to `phpunit/bin/`
+    * Change: Move `tests/bootstrap.php` to `phpunit/`
+    * Change: Move `tests/` to `phpunit/tests/`
+    * Change: Rename `phpunit.xml` to `phpunit.xml.dist` per best practices
+* Change: Note compatibility through WP 5.5+
+* New: Unit tests: Add tests for `add_daily_email_optin_checkbox()`, `dashboard_setup()`
+
 = 1.3.3 (2020-06-05) =
 * New: Add TODO.md and move existing TODO list from top of main plugin file into it (and added to it)
 * Change: Note compatibility through WP 5.4+
@@ -140,18 +151,13 @@ add_filter( 'c2c_years_ago_today-first_published_year', function ( $year ) { ret
 * Change: Note compatibility through WP 5.3+
 * Change: Update copyright date (2020)
 
-= 1.3.1 (2019-06-10) =
-* Fix: Fix incorect handling of timestamp argument when supplied to `get_formatted_date_string()` (bug not triggered within plugin itself)
-* Change: Update unit test install script and bootstrap to use latest WP unit test repo
-* Change: Note compatibility through WP 5.2+
-* Change: Add link to CHANGELOG.md in README.md
-* Change: Remove 'Domain Path' plugin header
-* Fix: Correct typo in GitHub URL
-
 _Full changelog is available in [CHANGELOG.md](https://github.com/coffee2code/years-ago-today/blob/master/CHANGELOG.md)._
 
 
 == Upgrade Notice ==
+
+= 1.3.4 =
+Trivial update: Removed some extra spaces from output markup, restructured unit test file structure, expanded unit test coverage, and noted compatibility through WP 5.5+.
 
 = 1.3.3 =
 Trivial update: added TODO.md file, updated a few URLs to be HTTPS, expanded unit testing, and noted compatibility through WP 5.4+
