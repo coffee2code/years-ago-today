@@ -424,6 +424,50 @@ HTML;
 	}
 
 	/*
+	 * add_daily_email_optin_checkbox()
+	 */
+
+	public function test_add_daily_email_optin_checkbox() {
+		$expected = <<<HTML
+		<table class="form-table">
+		<tr>
+			<th scope="row">"Years Ago Today" email</th>
+			<td>
+				<label for="c2c_years_ago_today_daily_email_optin">
+					<input name="c2c_years_ago_today_daily_email_optin" type="checkbox" id="c2c_years_ago_today_daily_email_optin" value="1" disabled='disabled' />
+					Email me daily about posts published on this day in years past.				</label>
+			</td>
+		</tr>
+		</table>
+
+HTML;
+
+		$this->expectOutputRegex( '~^' . preg_quote( $expected ) . '$~', c2c_YearsAgoToday::add_daily_email_optin_checkbox() );
+	}
+
+	public function test_add_daily_email_optin_checkbox_when_checkbox_already_checked() {
+		$user_id = $this->factory->user->create( array( 'role' => 'administrator' ) );
+		wp_set_current_user( $user_id );
+		update_user_option( $user_id, 'c2c_years_ago_today_daily_email_optin', '1' );
+
+		$expected = <<<HTML
+		<table class="form-table">
+		<tr>
+			<th scope="row">"Years Ago Today" email</th>
+			<td>
+				<label for="c2c_years_ago_today_daily_email_optin">
+					<input name="c2c_years_ago_today_daily_email_optin" type="checkbox" id="c2c_years_ago_today_daily_email_optin" value="1" checked='checked' disabled='disabled' />
+					Email me daily about posts published on this day in years past.				</label>
+			</td>
+		</tr>
+		</table>
+
+HTML;
+
+		$this->expectOutputRegex( '~^' . preg_quote( $expected ) . '$~', c2c_YearsAgoToday::add_daily_email_optin_checkbox() );
+	}
+
+	/*
 	 * admin_css()
 	 */
 
