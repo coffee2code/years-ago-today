@@ -8,6 +8,7 @@
     * Change: Move `tests/` to `phpunit/tests/`
     * Change: Rename `phpunit.xml` to `phpunit.xml.dist` per best practices
 * Change: Note compatibility through WP 5.5+
+* New: Unit tests: Add tests for `dashboard_setup()`
 
 ## 1.3.3 _(2020-06-05)_
 * New: Add TODO.md and move existing TODO list from top of main plugin file into it (and added to it)

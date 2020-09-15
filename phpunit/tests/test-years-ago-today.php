@@ -4,6 +4,14 @@ defined( 'ABSPATH' ) or die();
 
 class Years_Ago_Today_Test extends WP_UnitTestCase {
 
+	public function tearDown() {
+		global $wp_meta_boxes;
+
+		parent::tearDown();
+
+		$wp_meta_boxes = NULL;
+	}
+
 	//
 	// HELPER FUNCTIONS
 	//
@@ -114,6 +122,50 @@ class Years_Ago_Today_Test extends WP_UnitTestCase {
 		c2c_YearsAgoToday::activate();
 
 		$this->assertNotFalse( wp_next_scheduled( c2c_YearsAgoToday::$cron_name ) );
+	}
+
+	/*
+	 * dashboard_setup()
+	 */
+
+	public function test_dashboard_setup() {
+		global $wp_meta_boxes;
+
+		include_once( ABSPATH . '/wp-admin/includes/dashboard.php' );
+		include_once( ABSPATH . '/wp-admin/includes/template.php' );
+
+		set_current_screen( 'index' );
+
+		$user_id = $this->factory->user->create( array( 'role' => 'administrator' ) );
+		wp_set_current_user( $user_id );
+
+		wp_dashboard_setup();
+
+		$this->assertNotNull( $wp_meta_boxes );
+		$this->assertArrayHasKey( 'dashboard_years_ago_today', $wp_meta_boxes['dashboard']['normal']['core'] );
+		$this->assertSame(
+			array(
+				'id' => 'dashboard_years_ago_today',
+				'title' => 'Years Ago Today',
+				'callback' => array( 'c2c_YearsAgoToday', 'wp_dashboard_years_ago_today' ),
+				'args' => array( '__widget_basename' => 'Years Ago Today' )
+			),
+			$wp_meta_boxes['dashboard']['normal']['core']['dashboard_years_ago_today']
+		);
+	}
+
+	public function test_dashboard_setup_when_not_on_dashboard() {
+		global $wp_meta_boxes;
+
+		include_once( ABSPATH . '/wp-admin/includes/dashboard.php' );
+		include_once( ABSPATH . '/wp-admin/includes/template.php' );
+
+		set_current_screen( 'post' );
+
+		$user_id = $this->factory->user->create( array( 'role' => 'administrator' ) );
+		wp_set_current_user( $user_id );
+
+		$this->assertNull( $wp_meta_boxes );
 	}
 
 	/*

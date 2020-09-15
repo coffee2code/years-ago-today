@@ -15,6 +15,6 @@ The following list comprises ideas, suggestions, and known issues, all of which 
   - Make the statuses filterable for custom post status support
   - Make the post types filterable (and expand default to public post types)
 * In `cron_email()`, improve handling for sending large number of emails
-* Unit tests: Add tests for `cron_email()`, `dashboard_setup()`, `add_daily_email_optin_checkbox()`, `option_save()`
+* Unit tests: Add tests for `cron_email()`, `add_daily_email_optin_checkbox()`, `option_save()`
 
 Feel free to make your own suggestions or champion for something already on the list (via the [plugin's support forum on WordPress.org](https://wordpress.org/support/plugin/years-ago-today/) or on [GitHub](https://github.com/coffee2code/years-ago-today/) as an issue or PR).
