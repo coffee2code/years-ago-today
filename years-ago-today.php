@@ -520,19 +520,19 @@ class c2c_YearsAgoToday {
 		$checked  = checked( get_user_option( self::$option_name ), self::$enabled_option_value, false );
 		$disabled = disabled( true, defined( 'DISABLE_WP_CRON' ) && true === DISABLE_WP_CRON, false );
 
-		?>
+?>
 		<table class="form-table">
 		<tr>
 			<th scope="row"><?php _e( '"Years Ago Today" email', 'years-ago-today' ); ?></th>
 			<td>
 				<label for="<?php echo esc_attr( self::$option_name ); ?>">
-					<input name="<?php echo esc_attr( self::$option_name ); ?>" type="checkbox" id="<?php echo esc_attr( self::$option_name ); ?>" value="<?php echo esc_attr( self::$enabled_option_value ); ?>"<?php echo $checked; ?> <?php echo $disabled; ?> />
+					<input name="<?php echo esc_attr( self::$option_name ); ?>" type="checkbox" id="<?php echo esc_attr( self::$option_name ); ?>" value="<?php echo esc_attr( self::$enabled_option_value ); ?>"<?php echo $checked; ?><?php echo $disabled; ?> />
 					<?php _e( 'Email me daily about posts published on this day in years past.', 'years-ago-today' ); ?>
 				</label>
 			</td>
 		</tr>
 		</table>
-		<?php
+<?php
 	}
 
 	/**
