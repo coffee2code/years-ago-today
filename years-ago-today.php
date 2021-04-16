@@ -562,7 +562,7 @@ class c2c_YearsAgoToday {
 	 * @since 1.0
 	 */
 	public static function admin_css() {
-		echo "<style type='text/css'>
+		echo "<style>
 			#dashboard-widgets .years-ago-today-posts h4 {
 				font-weight: bold;
 			}

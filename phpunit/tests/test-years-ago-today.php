@@ -472,7 +472,7 @@ HTML;
 	 */
 
 	public function test_admin_css() {
-		$expected = "<style type='text/css'>
+		$expected = "<style>
 			#dashboard-widgets .years-ago-today-posts h4 {
 				font-weight: bold;
 			}

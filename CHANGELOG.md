@@ -1,6 +1,7 @@
 # Changelog
 
 ## _(in-progress)_
+* New: Add HTML5 compliance by omitting `type` attribute for `style` tag
 * Change: Note compatibility through WP 5.7+
 * Change: Drop compatibility for versions of WP older than 4.9
 * Change: Update copyright date (2021)
