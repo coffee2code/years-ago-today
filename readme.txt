@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: dashboard, admin dashboard, on this day, past posts, history, dashboard widget, posts, coffee2code
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
-Requires at least: 4.6
+Requires at least: 4.9
 Tested up to: 5.7
 Stable tag: 1.3.4
 
