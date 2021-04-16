@@ -1,5 +1,8 @@
 # Changelog
 
+## _(in-progress)_
+* Change: Update copyright date (2021)
+
 ## 1.3.4 _(2020-09-14)_
 * Change: Remove some excess space characters within output markup
 * Change: Restructure unit test file structure
