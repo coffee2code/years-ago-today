@@ -112,10 +112,11 @@ class c2c_YearsAgoToday {
 		add_action( 'wp_dashboard_setup',       array( __CLASS__, 'dashboard_setup' ) );
 
 		// Adds the checkbox to user profiles.
-		add_action( 'profile_personal_options', array( __CLASS__, 'add_daily_email_optin_checkbox' ) );
+		add_action( 'personal_options',         array( __CLASS__, 'add_daily_email_optin_checkbox' ) );
 
 		// Saves the user preference for daily emails.
 		add_action( 'personal_options_update',  array( __CLASS__, 'option_save' ) );
+		add_action( 'edit_user_profile_update', array( __CLASS__, 'option_save' ) );
 
 		// Register cron task.
 		add_action( self::$cron_name,           array( __CLASS__, 'cron_email' ) );
@@ -515,11 +516,25 @@ class c2c_YearsAgoToday {
 	 * daily email about posts published in years past.
 	 *
 	 * @since 1.0
+	 * @since 1.4 Added $user arg.
+	 *
+	 * @param WP_User $user The user whose options are being shown.
 	 */
-	public static function add_daily_email_optin_checkbox() {
-		$checked  = checked( get_user_option( self::$option_name ), self::$enabled_option_value, false );
-		$disabled = disabled( true, defined( 'DISABLE_WP_CRON' ) && true === DISABLE_WP_CRON, false );
+	public static function add_daily_email_optin_checkbox( $user ) {
+		$current_user = wp_get_current_user();
+		$is_current_user_profile_page = ( $user->ID === $current_user->ID );
 
+		// Only show on current user's own profile, or other user profiles if current
+		// user has appropriate capabilities.
+		if ( ! $is_current_user_profile_page && ! current_user_can( 'edit_users' ) ) {
+			return;
+		}
+
+		$checked  = checked( get_user_option( self::$option_name, $user->ID ), self::$enabled_option_value, false );
+		$disabled = disabled( true, defined( 'DISABLE_WP_CRON' ) && true === DISABLE_WP_CRON, false );
+		$label = $is_current_user_profile_page
+			? __( 'Email me daily about posts published on this day in years past.', 'years-ago-today' )
+			: __( 'Email this user daily about posts published on this day in years past.', 'years-ago-today' );
 ?>
 		<table class="form-table">
 		<tr>
@@ -527,7 +542,7 @@ class c2c_YearsAgoToday {
 			<td>
 				<label for="<?php echo esc_attr( self::$option_name ); ?>">
 					<input name="<?php echo esc_attr( self::$option_name ); ?>" type="checkbox" id="<?php echo esc_attr( self::$option_name ); ?>" value="<?php echo esc_attr( self::$enabled_option_value ); ?>"<?php echo $checked; ?><?php echo $disabled; ?> />
-					<?php _e( 'Email me daily about posts published on this day in years past.', 'years-ago-today' ); ?>
+					<?php echo $label; ?>
 				</label>
 			</td>
 		</tr>

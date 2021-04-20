@@ -59,8 +59,9 @@ class Years_Ago_Today_Test extends WP_UnitTestCase {
 	public static function get_default_hooks() {
 		return array(
 			array( 'action', 'wp_dashboard_setup',       'dashboard_setup',                10 ),
-			array( 'action', 'profile_personal_options', 'add_daily_email_optin_checkbox', 10 ),
+			array( 'action', 'personal_options',         'add_daily_email_optin_checkbox', 10 ),
 			array( 'action', 'personal_options_update',  'option_save',                    10 ),
+			array( 'action', 'edit_user_profile_update', 'option_save',                    10 ),
 			array( 'action', 'c2c_years_ago_daily_cron', 'cron_email',                     10 ),
 			array( 'action', 'load-index.php',           'add_admin_css',                  10 ),
 		);
@@ -428,6 +429,10 @@ HTML;
 	 */
 
 	public function test_add_daily_email_optin_checkbox() {
+		$user_id = $this->factory->user->create( array( 'role' => 'administrator' ) );
+		wp_set_current_user( $user_id );
+		$user = get_user_by( 'ID', $user_id );
+
 		$expected = <<<HTML
 		<table class="form-table">
 		<tr>
@@ -442,13 +447,14 @@ HTML;
 
 HTML;
 
-		$this->expectOutputRegex( '~^' . preg_quote( $expected ) . '$~', c2c_YearsAgoToday::add_daily_email_optin_checkbox() );
+		$this->expectOutputRegex( '~^' . preg_quote( $expected ) . '$~', c2c_YearsAgoToday::add_daily_email_optin_checkbox( $user ) );
 	}
 
 	public function test_add_daily_email_optin_checkbox_when_checkbox_already_checked() {
 		$user_id = $this->factory->user->create( array( 'role' => 'administrator' ) );
 		wp_set_current_user( $user_id );
 		update_user_option( $user_id, 'c2c_years_ago_today_daily_email_optin', '1' );
+		$user = get_user_by( 'ID', $user_id );
 
 		$expected = <<<HTML
 		<table class="form-table">
@@ -464,7 +470,62 @@ HTML;
 
 HTML;
 
-		$this->expectOutputRegex( '~^' . preg_quote( $expected ) . '$~', c2c_YearsAgoToday::add_daily_email_optin_checkbox() );
+		$this->expectOutputRegex( '~^' . preg_quote( $expected ) . '$~', c2c_YearsAgoToday::add_daily_email_optin_checkbox( $user ) );
+	}
+
+	public function test_add_daily_email_optin_checkbox_for_another_user_when_current_user_has_checkbox_checked() {
+		$user_id = $this->factory->user->create( array( 'role' => 'administrator' ) );
+		wp_set_current_user( $user_id );
+		update_user_option( $user_id, 'c2c_years_ago_today_daily_email_optin', '1' );
+		$user2 = $this->factory->user->create_and_get( array( 'role' => 'subscriber' ) );
+
+		$expected = <<<HTML
+		<table class="form-table">
+		<tr>
+			<th scope="row">"Years Ago Today" email</th>
+			<td>
+				<label for="c2c_years_ago_today_daily_email_optin">
+					<input name="c2c_years_ago_today_daily_email_optin" type="checkbox" id="c2c_years_ago_today_daily_email_optin" value="1" disabled='disabled' />
+					Email this user daily about posts published on this day in years past.				</label>
+			</td>
+		</tr>
+		</table>
+
+HTML;
+
+		$this->expectOutputRegex( '~^' . preg_quote( $expected ) . '$~', c2c_YearsAgoToday::add_daily_email_optin_checkbox( $user2 ) );
+	}
+
+	public function test_add_daily_email_optin_checkbox_for_another_user_when_that_user_has_checkbox_checked() {
+		$user_id = $this->factory->user->create( array( 'role' => 'administrator' ) );
+		wp_set_current_user( $user_id );
+		delete_user_option( $user_id, 'c2c_years_ago_today_daily_email_optin' );
+		$user2 = $this->factory->user->create_and_get( array( 'role' => 'subscriber' ) );
+		update_user_option( $user2->ID, 'c2c_years_ago_today_daily_email_optin', '1' );
+
+		$expected = <<<HTML
+		<table class="form-table">
+		<tr>
+			<th scope="row">"Years Ago Today" email</th>
+			<td>
+				<label for="c2c_years_ago_today_daily_email_optin">
+					<input name="c2c_years_ago_today_daily_email_optin" type="checkbox" id="c2c_years_ago_today_daily_email_optin" value="1" checked='checked' disabled='disabled' />
+					Email this user daily about posts published on this day in years past.				</label>
+			</td>
+		</tr>
+		</table>
+
+HTML;
+
+		$this->expectOutputRegex( '~^' . preg_quote( $expected ) . '$~', c2c_YearsAgoToday::add_daily_email_optin_checkbox( $user2 ) );
+	}
+
+	public function test_add_daily_email_optin_checkbox_for_another_user_when_current_user_cannot_edit_that_user() {
+		$user_id = $this->factory->user->create( array( 'role' => 'editor' ) );
+		wp_set_current_user( $user_id );
+		$user2 = $this->factory->user->create_and_get( array( 'role' => 'subscriber' ) );
+
+		$this->assertEmpty( c2c_YearsAgoToday::add_daily_email_optin_checkbox( $user2 ) );
 	}
 
 	/*
