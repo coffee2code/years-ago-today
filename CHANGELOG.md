@@ -1,6 +1,13 @@
 # Changelog
 
-## _(in-progress)_
+## 1.4 _(2021-04-19)_
+
+### Highlights:
+
+This minor release adds the ability for admins to edit the value of the setting for other users and also notes compatibility through WP 5.7+.
+
+### Details:
+
 * New: Permit admins to see and edit the value of the setting for other users
 * New: Add HTML5 compliance by omitting `type` attribute for `style` tag
 * Change: Note compatibility through WP 5.7+

@@ -6,7 +6,7 @@ License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Requires at least: 4.9
 Tested up to: 5.7
-Stable tag: 1.3.4
+Stable tag: 1.4
 
 Admin dashboard widget (and optional daily email) that lists posts published to your site on this day in years past.
 
@@ -122,6 +122,19 @@ add_filter( 'c2c_years_ago_today-first_published_year', function ( $year ) { ret
 
 == Changelog ==
 
+= 1.4 (2021-04-19) =
+Highlights:
+
+* This minor release adds the ability for admins to edit the value of the setting for other users and also notes compatibility through WP 5.7+.
+
+Details:
+
+* New: Permit admins to see and edit the value of the setting for other users
+* New: Add HTML5 compliance by omitting `type` attribute for `style` tag
+* Change: Note compatibility through WP 5.7+
+* Change: Drop compatibility for versions of WP older than 4.9
+* Change: Update copyright date (2021)
+
 = 1.3.4 (2020-09-14) =
 * Change: Remove some excess space characters within output markup
 * Change: Restructure unit test file structure
@@ -146,15 +159,13 @@ add_filter( 'c2c_years_ago_today-first_published_year', function ( $year ) { ret
     * Change: Remove unnecessary unregistering of hooks and thusly delete `tearDown()`
     * Change: Use HTTPS for link to WP SVN repository in bin script for configuring unit tests
 
-= 1.3.2 (2019-11-16) =
-* Fix: Fix incorrect date query handling
-* Change: Note compatibility through WP 5.3+
-* Change: Update copyright date (2020)
-
 _Full changelog is available in [CHANGELOG.md](https://github.com/coffee2code/years-ago-today/blob/master/CHANGELOG.md)._
 
 
 == Upgrade Notice ==
+
+= 1.4 =
+Minor update: added ability for admins to edit the value of the setting for other users, noted compatibility through WP 5.7+., and updated copyright date (2021).
 
 = 1.3.4 =
 Trivial update: Removed some extra spaces from output markup, restructured unit test file structure, expanded unit test coverage, and noted compatibility through WP 5.5+.

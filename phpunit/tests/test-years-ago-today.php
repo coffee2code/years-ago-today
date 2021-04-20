@@ -76,7 +76,7 @@ class Years_Ago_Today_Test extends WP_UnitTestCase {
 
 
 	public function test_plugin_version() {
-		$this->assertEquals( '1.3.4', c2c_YearsAgoToday::version() );
+		$this->assertEquals( '1.4', c2c_YearsAgoToday::version() );
 	}
 
 	public function test_class_is_available() {
