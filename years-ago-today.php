@@ -257,8 +257,8 @@ class c2c_YearsAgoToday {
 			$body = sprintf(
 				/* translators: 1: number of posts, 2: site name, 3: date string for today */
 				_n(
-					'<strong>%1$d</strong> post has been published to the site %2$s on <strong>%3$s</strong> in a previous year:',
-					'<strong>%1$d</strong> posts have been published to the site %2$s on <strong>%3$s</strong> in previous years:',
+					'%1$d post has been published to the site %2$s on %3$s in a previous year:',
+					'%1$d posts have been published to the site %2$s on %3$s in previous years:',
 					$query->post_count,
 					'years-ago-today'
 				),
