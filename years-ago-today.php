@@ -100,6 +100,13 @@ class c2c_YearsAgoToday {
 	 * @since 1.0
 	 */
 	public static function init() {
+		// Register cron task.
+		add_action( self::$cron_name,           array( __CLASS__, 'cron_email' ) );
+
+		if(!is_admin()) {
+			return false;
+		}
+
 		register_activation_hook( __FILE__, array( __CLASS__, 'activate' ) );
 		register_deactivation_hook( __FILE__, array( __CLASS__, 'deactivate' ) );
 
@@ -117,9 +124,6 @@ class c2c_YearsAgoToday {
 		// Saves the user preference for daily emails.
 		add_action( 'personal_options_update',  array( __CLASS__, 'option_save' ) );
 		add_action( 'edit_user_profile_update', array( __CLASS__, 'option_save' ) );
-
-		// Register cron task.
-		add_action( self::$cron_name,           array( __CLASS__, 'cron_email' ) );
 
 		// TODO: remove
 		add_action( 'load-index.php',           array( __CLASS__, 'add_admin_css' ) );
@@ -253,8 +257,8 @@ class c2c_YearsAgoToday {
 			$body = sprintf(
 				/* translators: 1: number of posts, 2: site name, 3: date string for today */
 				_n(
-					'<strong>%1$d</strong> post has been published to the site %2$s on <strong>%3$s</strong> in a previous year:',
-					'<strong>%1$d</strong> posts have been published to the site %2$s on <strong>%3$s</strong> in previous years:',
+					'%1$d post has been published to the site %2$s on %3$s in a previous year:',
+					'%1$d posts have been published to the site %2$s on %3$s in previous years:',
 					$query->post_count,
 					'years-ago-today'
 				),
@@ -590,6 +594,6 @@ class c2c_YearsAgoToday {
 
 } // end c2c_YearsAgoToday
 
-add_action( 'plugins_loaded', array( 'c2c_YearsAgoToday', 'init' ) );
+c2c_YearsAgoToday::init();
 
 endif; // end if !class_exists()
