@@ -83,7 +83,7 @@ class c2c_YearsAgoToday {
 	 *
 	 * @since 1.2
 	 */
-	private function __wakeup() {}
+	public function __wakeup() {}
 
 	/**
 	 * Returns version of the plugin.
