@@ -101,9 +101,6 @@ class c2c_YearsAgoToday {
 	 * @since 1.0
 	 */
 	public static function init() {
-		// Register cron task.
-		add_action( self::$cron_name,           array( __CLASS__, 'cron_email' ) );
-
 		if ( ! is_admin() ) {
 			return false;
 		}
@@ -128,6 +125,16 @@ class c2c_YearsAgoToday {
 
 		// TODO: remove
 		add_action( 'load-index.php',           array( __CLASS__, 'add_admin_css' ) );
+	}
+
+	/**
+	 * Initializes things necessary for the cron job.
+	 *
+	 * @since 1.5
+	 */
+	public static function cron_init() {
+		// Register cron task.
+		add_action( self::$cron_name, array( __CLASS__, 'cron_email' ) );
 	}
 
 	/**
@@ -595,6 +602,7 @@ class c2c_YearsAgoToday {
 
 } // end c2c_YearsAgoToday
 
-c2c_YearsAgoToday::init();
+add_action( 'plugins_loaded', array( 'c2c_YearsAgoToday', 'init' ) );
+c2c_YearsAgoToday::cron_init();
 
 endif; // end if !class_exists()

@@ -2,6 +2,7 @@
 
 ## _(in-progress)_
 * Fix: Make `__wakeup()` public to prevent PHP8 warnings. Props Simounet, koolinus.
+* Change: Move cron initialization into new `cron_init()`
 * Change: Register cron task earlier. Props Simounet.
 * Change: Remove HTML from email. Props Simounet.
 
