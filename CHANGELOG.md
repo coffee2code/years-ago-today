@@ -6,6 +6,7 @@
 * Change: Register cron task earlier. Props Simounet.
 * Change: Remove HTML from email. Props Simounet.
 * New: Add DEVELOPER-DOCS.md and move hooks documentation into it
+* Change: Pare plugin tags down to 5
 * Change: Note compatibility through WP 6.0+
 * Change: Update copyright date (2022)
 * Unit tests:
