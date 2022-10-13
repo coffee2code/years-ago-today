@@ -5,6 +5,7 @@
 * Change: Move cron initialization into new `cron_init()`
 * Change: Register cron task earlier. Props Simounet.
 * Change: Remove HTML from email. Props Simounet.
+* Change: Note compatibility through WP 6.0+
 * Change: Update copyright date (2022)
 
 ## 1.4 _(2021-04-19)_
