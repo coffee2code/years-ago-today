@@ -1,6 +1,13 @@
 # Changelog
 
-## _(in-progress)_
+## 1.5 _(2022-10-12)_
+
+### Highlights:
+
+This minor release improves cron handling, removes the little HTML used from emails, prevents a PHP8 warning, adds DEVELOPER-DOCS.md, notes compatibility through WP 6.0+, and reorganizes unit test files.
+
+### Details:
+
 * Fix: Make `__wakeup()` public to prevent PHP8 warnings. Props Simounet, koolinus.
 * Change: Move cron initialization into new `cron_init()`
 * Change: Register cron task earlier. Props Simounet.

@@ -6,7 +6,7 @@ License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Requires at least: 4.9
 Tested up to: 6.0
-Stable tag: 1.4
+Stable tag: 1.5
 
 Admin dashboard widget (and optional daily email) that lists posts published to your site on this day in years past.
 
@@ -67,6 +67,28 @@ Developer documentation can be found in [DEVELOPER-DOCS.md](https://github.com/c
 
 == Changelog ==
 
+= 1.5 (2022-10-12) =
+Highlights:
+
+* This minor release improves cron handling, removes the little HTML used from emails, prevents a PHP8 warning, adds DEVELOPER-DOCS.md, notes compatibility through WP 6.0+, and reorganizes unit test files.
+
+Details:
+
+* Fix: Make `__wakeup()` public to prevent PHP8 warnings. Props Simounet, koolinus.
+* Change: Move cron initialization into new `cron_init()`
+* Change: Register cron task earlier. Props Simounet.
+* Change: Remove HTML from email. Props Simounet.
+* New: Add DEVELOPER-DOCS.md and move hooks documentation into it
+* Change: Pare plugin tags down to 5
+* Change: Note compatibility through WP 6.0+
+* Change: Update copyright date (2022)
+* Unit tests:
+    * Change: Restructure unit test directories
+        * Change: Move `phpunit/` into `tests/phpunit/`
+        * Change: Move `phpunit/bin/` into `tests/`
+    * Change: Remove 'test-' prefix from unit test file
+    * Change: In bootstrap, store path to plugin file constant
+
 = 1.4 (2021-04-19) =
 Highlights:
 
@@ -91,23 +113,13 @@ Details:
 * Change: Note compatibility through WP 5.5+
 * New: Unit tests: Add tests for `add_daily_email_optin_checkbox()`, `dashboard_setup()`
 
-= 1.3.3 (2020-06-05) =
-* New: Add TODO.md and move existing TODO list from top of main plugin file into it (and added to it)
-* Change: Note compatibility through WP 5.4+
-* Change: Update links to coffee2code.com to be HTTPS
-* Fix: Use full path to CHANGELOG.md in the Changelog section of readme.txt
-* Unit tests:
-    * New: Add test and data provider for hooking actions and filters
-    * New: Add tests for configuration defaults such as option name, cron name, etc
-    * New: Add tests for `add_admin_css()`, `admin_css()`
-    * Change: Use `expectOutputRegex()` instead of doing explicit output buffering
-    * Change: Remove unnecessary unregistering of hooks and thusly delete `tearDown()`
-    * Change: Use HTTPS for link to WP SVN repository in bin script for configuring unit tests
-
 _Full changelog is available in [CHANGELOG.md](https://github.com/coffee2code/years-ago-today/blob/master/CHANGELOG.md)._
 
 
 == Upgrade Notice ==
+
+= 1.5 =
+Minor update: improved cron handling, discontinued HTML in emails, prevented a PHP8 warning, added DEVELOPER-DOCS.md, noted compatibility through WP 6.0+, and reorganized unit test files.
 
 = 1.4 =
 Minor update: added ability for admins to edit the value of the setting for other users, noted compatibility through WP 5.7+., and updated copyright date (2021).
