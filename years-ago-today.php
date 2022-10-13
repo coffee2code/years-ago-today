@@ -82,6 +82,7 @@ class c2c_YearsAgoToday {
 	 * Prevents unserializing an instance.
 	 *
 	 * @since 1.2
+	 * @since 1.5 Changed to public.
 	 */
 	public function __wakeup() {}
 
@@ -103,7 +104,7 @@ class c2c_YearsAgoToday {
 		// Register cron task.
 		add_action( self::$cron_name,           array( __CLASS__, 'cron_email' ) );
 
-		if(!is_admin()) {
+		if ( ! is_admin() ) {
 			return false;
 		}
 
@@ -235,12 +236,12 @@ class c2c_YearsAgoToday {
 					 * @param string $email_body The body of the email. Use "%1$s" as a
 					 *                           placeholder for site name and "%2$s" for date.
 					 *                           Default 'No posts were published to the site
-					 *                           %1$s on <strong>%2$s</strong> in any past year.'.
+					 *                           %1$s on %2$s in any past year.'.
 					 */
 					apply_filters(
 						'c2c_years_ago_today-email-body-no-posts',
 						/* translators: 1: name of the site, 2: date string for today */
-						__( 'No posts were published to the site %1$s on <strong>%2$s</strong> in any past year.', 'years-ago-today' )
+						__( 'No posts were published to the site %1$s on %2$s in any past year.', 'years-ago-today' )
 					),
 					$site_name,
 					self::get_formatted_date_string()

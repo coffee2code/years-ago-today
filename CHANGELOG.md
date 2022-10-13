@@ -1,5 +1,10 @@
 # Changelog
 
+## _(in-progress)_
+* Fix: Make `__wakeup()` public to prevent PHP8 warnings. Props Simounet, koolinus.
+* Change: Register cron task earlier. Props Simounet.
+* Change: Remove HTML from email. Props Simounet.
+
 ## 1.4 _(2021-04-19)_
 
 ### Highlights:

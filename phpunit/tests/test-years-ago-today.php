@@ -4,6 +4,15 @@ defined( 'ABSPATH' ) or die();
 
 class Years_Ago_Today_Test extends WP_UnitTestCase {
 
+	public static function setUpBeforeClass() {
+		// Make all requests as if in the admin, which is the only place the plugin
+		// affects.
+		define( 'WP_ADMIN', true );
+
+		// Re-initialize plugin now that WP_ADMIN is true.
+		c2c_YearsAgoToday::init();
+	}
+
 	public function tearDown() {
 		global $wp_meta_boxes;
 
@@ -324,7 +333,7 @@ class Years_Ago_Today_Test extends WP_UnitTestCase {
 
 		$this->assertEquals(
 			sprintf(
-				'No posts were published to the site %1$s on <strong>%2$s</strong> in any past year.',
+				'No posts were published to the site %1$s on %2$s in any past year.',
 				'Test Blog',
 				current_time( 'M jS' )
 			),
@@ -338,7 +347,7 @@ class Years_Ago_Today_Test extends WP_UnitTestCase {
 		$this->factory->post->create( array( 'post_date' => $this->get_date( '2015', false ) ) );
 
 		$this->assertContains(
-			'<strong>1</strong> post has been published to the site Test Blog on <strong>' . current_time( 'M jS' ) . '</strong> in a previous year:',
+			'1 post has been published to the site Test Blog on ' . current_time( 'M jS' ) . ' in a previous year:',
 			c2c_YearsAgoToday::get_email_body()
 		);
 	}
@@ -349,7 +358,7 @@ class Years_Ago_Today_Test extends WP_UnitTestCase {
 		// Extra non-matching post
 		$this->factory->post->create( array( 'post_date' => $this->get_date( '2015', false ) ) );
 
-		$email  = '<strong>1</strong> post has been published to the site Test Blog on <strong>' . current_time( 'M jS' ) . '</strong> in a previous year:';
+		$email  = '1 post has been published to the site Test Blog on ' . current_time( 'M jS' ) . ' in a previous year:';
 		$email .= "\n\n== 2012 ==\n";
 		$email .= "* {$post_title} : " . get_permalink( $post ) . "\n";
 
@@ -366,7 +375,7 @@ class Years_Ago_Today_Test extends WP_UnitTestCase {
 		$this->factory->post->create( array( 'post_date' => $this->get_date( '2015', false ) ) );
 
 		$this->assertContains(
-			'<strong>2</strong> posts have been published to the site Test Blog on <strong>' . current_time( 'M jS' ) . '</strong> in previous years:',
+			'2 posts have been published to the site Test Blog on ' . current_time( 'M jS' ) . ' in previous years:',
 			c2c_YearsAgoToday::get_email_body()
 		);
 	}
@@ -379,7 +388,7 @@ class Years_Ago_Today_Test extends WP_UnitTestCase {
 		// Extra non-matching post
 		$this->factory->post->create( array( 'post_date' => $this->get_date( '2015', false ) ) );
 
-		$email  = '<strong>2</strong> posts have been published to the site Test Blog on <strong>' . current_time( 'M jS' ) . '</strong> in previous years:';
+		$email  = '2 posts have been published to the site Test Blog on ' . current_time( 'M jS' ) . ' in previous years:';
 		$email .= "\n\n== 2014 ==\n";
 		$email .= "* {$post_title2} : " . get_permalink( $post2 ) . "\n";
 		$email .= "\n\n== 2012 ==\n";
