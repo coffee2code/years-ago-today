@@ -1,5 +1,8 @@
 # Changelog
 
+## _(in-progress)_
+* Change: Update copyright date (2023)
+
 ## 1.5 _(2022-10-12)_
 
 ### Highlights:
