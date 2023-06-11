@@ -1,6 +1,6 @@
 # Changelog
 
-## _(in-progress)_
+## 1.5.1 _(2023-06-11)_
 * Change: Note compatibility through WP 6.3+
 * Change: Update copyright date (2023)
 * New: Add link to DEVELOPER-DOCS.md in README.md

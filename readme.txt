@@ -6,7 +6,7 @@ License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Requires at least: 4.9
 Tested up to: 6.3
-Stable tag: 1.5
+Stable tag: 1.5.1
 
 Admin dashboard widget (and optional daily email) that lists posts published to your site on this day in years past.
 
@@ -67,6 +67,11 @@ Developer documentation can be found in [DEVELOPER-DOCS.md](https://github.com/c
 
 == Changelog ==
 
+= 1.5.1 (2023-06-11) =
+* Change: Note compatibility through WP 6.3+
+* Change: Update copyright date (2023)
+* New: Add link to DEVELOPER-DOCS.md in README.md
+
 = 1.5 (2022-10-12) =
 Highlights:
 
@@ -102,21 +107,13 @@ Details:
 * Change: Drop compatibility for versions of WP older than 4.9
 * Change: Update copyright date (2021)
 
-= 1.3.4 (2020-09-14) =
-* Change: Remove some excess space characters within output markup
-* Change: Restructure unit test file structure
-    * New: Create new subdirectory `phpunit/` to house all files related to unit testing
-    * Change: Move `bin/` to `phpunit/bin/`
-    * Change: Move `tests/bootstrap.php` to `phpunit/`
-    * Change: Move `tests/` to `phpunit/tests/`
-    * Change: Rename `phpunit.xml` to `phpunit.xml.dist` per best practices
-* Change: Note compatibility through WP 5.5+
-* New: Unit tests: Add tests for `add_daily_email_optin_checkbox()`, `dashboard_setup()`
-
 _Full changelog is available in [CHANGELOG.md](https://github.com/coffee2code/years-ago-today/blob/master/CHANGELOG.md)._
 
 
 == Upgrade Notice ==
+
+= 1.5.1 =
+Trivial update: noted compatibility through WP 6.3+ and updated copyright date (2023)
 
 = 1.5 =
 Minor update: improved cron handling, discontinued HTML in emails, prevented a PHP8 warning, added DEVELOPER-DOCS.md, noted compatibility through WP 6.0+, and reorganized unit test files.
