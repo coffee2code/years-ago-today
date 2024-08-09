@@ -282,7 +282,7 @@ class c2c_YearsAgoToday {
 				// Only output the year once.
 				if ( $year != $this_year ) {
 					$year = $this_year;
-					$body .= "\n\n== ${year} ==\n";
+					$body .= "\n\n== $year ==\n";
 				}
 
 				$body .= '* ' . get_the_title() .  ' : ' . esc_url( get_permalink() ) . "\n";
@@ -413,7 +413,7 @@ class c2c_YearsAgoToday {
 				// Only output the year once.
 				if ( $year != $this_year ) {
 					$year = $this_year;
-					echo "<li class='years-ago-today-year'><h4>${year}</h4></li>\n";
+					echo "<li class='years-ago-today-year'><h4>$year</h4></li>\n";
 				}
 
 				the_title( '<li><a href="' . esc_url( get_permalink() ) . '">', '</a></li>' );
