@@ -5,6 +5,9 @@
  * @package Years_Ago_Today
  */
 
+// Prevent web access.
+( php_sapi_name() !== 'cli' ) && die();
+
 define( 'YEARS_AGO_TODAY_PLUGIN_DIR',  dirname( __FILE__, 3 ) );
 define( 'YEARS_AGO_TODAY_PLUGIN_FILE', YEARS_AGO_TODAY_PLUGIN_DIR . '/years-ago-today.php' );
 
