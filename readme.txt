@@ -5,7 +5,7 @@ Tags: dashboard, admin, on this day, history, coffee2code
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Requires at least: 4.9
-Tested up to: 6.3
+Tested up to: 6.6
 Stable tag: 1.5.1
 
 Admin dashboard widget (and optional daily email) that lists posts published to your site on this day in years past.
