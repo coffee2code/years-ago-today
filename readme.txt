@@ -54,6 +54,10 @@ Your site has its cron system disabled (via the `DISABLE_WP_CRON` constant) whic
 
 The cron system for WordPress (which handles scheduled events, such as the schedule daily email) requires site traffic to trigger close to its scheduled time, so low traffic sites may not see events fire at a consistent time. It's also possible cron has been disabled by the site (see previous question).
 
+= Does this plugin include unit tests? =
+
+Yes. The tests are not packaged in the release .zip file or included in plugins.svn.wordpress.org, but can be found in the [plugin's GitHub repository](https://github.com/coffee2code/years-ago-today/).
+
 
 == Developer Documentation ==
 
