@@ -5,7 +5,8 @@
  * @package Years_Ago_Today
  */
 
-define( 'YEARS_AGO_TODAY_PLUGIN_FILE', dirname( __FILE__, 3 ) . '/years-ago-today.php' );
+define( 'YEARS_AGO_TODAY_PLUGIN_DIR',  dirname( __FILE__, 3 ) );
+define( 'YEARS_AGO_TODAY_PLUGIN_FILE', YEARS_AGO_TODAY_PLUGIN_DIR . '/years-ago-today.php' );
 
 ini_set( 'display_errors', 'on' );
 error_reporting( E_ALL );

@@ -4,6 +4,8 @@
 * Change: Note compatibility through WP 6.6+
 * Change: Update copyright date (2024)
 * New: Add `.gitignore` file
+* Unit tests:
+    * Change: In bootstrap, store path to plugin file in a constant
 
 ## 1.5.1 _(2023-06-11)_
 * Change: Note compatibility through WP 6.3+
