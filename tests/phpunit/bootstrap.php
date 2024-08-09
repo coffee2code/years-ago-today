@@ -8,6 +8,17 @@
 define( 'YEARS_AGO_TODAY_PLUGIN_DIR',  dirname( __FILE__, 3 ) );
 define( 'YEARS_AGO_TODAY_PLUGIN_FILE', YEARS_AGO_TODAY_PLUGIN_DIR . '/years-ago-today.php' );
 
+$polyfill_path = YEARS_AGO_TODAY_PLUGIN_DIR . '/vendor/yoast/phpunit-polyfills/phpunitpolyfills-autoload.php';
+if ( file_exists( $polyfill_path ) ) {
+	require $polyfill_path;
+} else {
+	echo "Error: PHPUnit Polyfills dependency not found.\n";
+	echo "Run: composer require --dev yoast/phpunit-polyfills:\"^2.0\"\n";
+	exit;
+}
+
+! defined( 'WP_RUN_CORE_TESTS' ) && define( 'WP_RUN_CORE_TESTS', false );
+
 ini_set( 'display_errors', 'on' );
 error_reporting( E_ALL );
 
