@@ -1,6 +1,7 @@
 # Changelog
 
 ## _(in-progress)_
+* Fix: Convert use of deprecated string interpolation syntax to prevent notice under PHP8.2. Props Simounet.
 * Change: Note compatibility through WP 6.6+
 * Change: Update copyright date (2024)
 * New: Add `.gitignore` file
