@@ -8,6 +8,7 @@
     * Allow tests to run against current versions of WordPress
     * New: Add `composer.json` for PHPUnit Polyfill dependency
     * Change: In bootstrap, store path to plugin file in a constant
+    * Change: In bootstrap, add backcompat for PHPUnit pre-v6.0
 
 ## 1.5.1 _(2023-06-11)_
 * Change: Note compatibility through WP 6.3+
