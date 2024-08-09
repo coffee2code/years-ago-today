@@ -6,7 +6,7 @@ License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Requires at least: 4.9
 Tested up to: 6.6
-Stable tag: 1.5.1
+Stable tag: 1.6
 
 Admin dashboard widget (and optional daily email) that lists posts published to your site on this day in years past.
 
@@ -71,6 +71,19 @@ Developer documentation can be found in [DEVELOPER-DOCS.md](https://github.com/c
 
 == Changelog ==
 
+= 1.6 (2024-08-09) =
+* Fix: Convert use of deprecated string interpolation syntax to prevent notice under PHP8.2. Props Simounet.
+* Change: Note compatibility through WP 6.6+
+* Change: Update copyright date (2024)
+* New: Add `.gitignore` file
+* Change: Remove development and testing-related files from release packaging
+* Unit tests:
+    * Hardening: Prevent direct web access to `bootstrap.php`
+    * Allow tests to run against current versions of WordPress
+    * New: Add `composer.json` for PHPUnit Polyfill dependency
+    * Change: In bootstrap, store path to plugin file in a constant
+    * Change: In bootstrap, add backcompat for PHPUnit pre-v6.0
+
 = 1.5.1 (2023-06-11) =
 * Change: Note compatibility through WP 6.3+
 * Change: Update copyright date (2023)
@@ -98,23 +111,13 @@ Details:
     * Change: Remove 'test-' prefix from unit test file
     * Change: In bootstrap, store path to plugin file constant
 
-= 1.4 (2021-04-19) =
-Highlights:
-
-* This minor release adds the ability for admins to edit the value of the setting for other users and also notes compatibility through WP 5.7+.
-
-Details:
-
-* New: Permit admins to see and edit the value of the setting for other users
-* New: Add HTML5 compliance by omitting `type` attribute for `style` tag
-* Change: Note compatibility through WP 5.7+
-* Change: Drop compatibility for versions of WP older than 4.9
-* Change: Update copyright date (2021)
-
 _Full changelog is available in [CHANGELOG.md](https://github.com/coffee2code/years-ago-today/blob/master/CHANGELOG.md)._
 
 
 == Upgrade Notice ==
+
+= 1.6 =
+Minor update: Prevented deprecation notice under PHP8.2, noted compatibility through WP 6.6+, removed unit tests from release packaging, and updated copyright date (2024)
 
 = 1.5.1 =
 Trivial update: noted compatibility through WP 6.3+ and updated copyright date (2023)

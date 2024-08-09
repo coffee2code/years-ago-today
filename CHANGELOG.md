@@ -1,6 +1,6 @@
 # Changelog
 
-## _(in-progress)_
+## 1.6 _(2024-08-09)_
 * Fix: Convert use of deprecated string interpolation syntax to prevent notice under PHP8.2. Props Simounet.
 * Change: Note compatibility through WP 6.6+
 * Change: Update copyright date (2024)
