@@ -42,7 +42,7 @@
 defined( 'ABSPATH' ) or die();
 
 if ( ! class_exists( 'c2c_YearsAgoToday' ) ) :
-	
+
 class c2c_YearsAgoToday {
 
 	/**
