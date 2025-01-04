@@ -42,7 +42,8 @@
 defined( 'ABSPATH' ) or die();
 
 if ( ! class_exists( 'c2c_YearsAgoToday' ) ) :
-
+register_activation_hook( __FILE__, array( 'c2c_YearsAgoToday', 'activate' ) );
+	
 class c2c_YearsAgoToday {
 
 	/**
@@ -105,7 +106,6 @@ class c2c_YearsAgoToday {
 			return false;
 		}
 
-		register_activation_hook( __FILE__, array( __CLASS__, 'activate' ) );
 		register_deactivation_hook( __FILE__, array( __CLASS__, 'deactivate' ) );
 
 		// Load textdomain.
