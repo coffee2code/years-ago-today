@@ -42,7 +42,6 @@
 defined( 'ABSPATH' ) or die();
 
 if ( ! class_exists( 'c2c_YearsAgoToday' ) ) :
-register_activation_hook( __FILE__, array( 'c2c_YearsAgoToday', 'activate' ) );
 	
 class c2c_YearsAgoToday {
 
@@ -603,6 +602,7 @@ class c2c_YearsAgoToday {
 } // end c2c_YearsAgoToday
 
 add_action( 'plugins_loaded', array( 'c2c_YearsAgoToday', 'init' ) );
+register_activation_hook( __FILE__, array( 'c2c_YearsAgoToday', 'activate' ) );
 c2c_YearsAgoToday::cron_init();
 
 endif; // end if !class_exists()
