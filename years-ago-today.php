@@ -105,7 +105,6 @@ class c2c_YearsAgoToday {
 			return false;
 		}
 
-		register_activation_hook( __FILE__, array( __CLASS__, 'activate' ) );
 		register_deactivation_hook( __FILE__, array( __CLASS__, 'deactivate' ) );
 
 		// Load textdomain.
@@ -603,6 +602,7 @@ class c2c_YearsAgoToday {
 } // end c2c_YearsAgoToday
 
 add_action( 'plugins_loaded', array( 'c2c_YearsAgoToday', 'init' ) );
+register_activation_hook( __FILE__, array( 'c2c_YearsAgoToday', 'activate' ) );
 c2c_YearsAgoToday::cron_init();
 
 endif; // end if !class_exists()
