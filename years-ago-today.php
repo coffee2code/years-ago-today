@@ -274,6 +274,9 @@ class c2c_YearsAgoToday {
 				self::get_formatted_date_string()
 			);
 
+			$html_body = '<html><head><title>' . self::get_email_subject() . '</title></head><body>';
+			$html_body .= '<p>' . esc_html( $body ) . '</p>';
+
 			$year = '';
 			while ( $query->have_posts() ) :
 				$query->the_post();
@@ -282,14 +285,55 @@ class c2c_YearsAgoToday {
 				if ( $year != $this_year ) {
 					$year = $this_year;
 					$body .= "\n\n== $year ==\n";
+					$html_body .= '<h2>' . $year . '</h2>';
 				}
-
 				$body .= '* ' . get_the_title() .  ' : ' . esc_url( get_permalink() ) . "\n";
+				$html_body .= '<h3><a href="' . esc_url( get_permalink() ) . '">' . esc_html( get_the_title() ) . '</a></h3>';
+				$html_body .= wp_kses_post( self::get_resized_content() );
+
 			endwhile;
 		}
 
-		return $body;
+		return array(
+			'text' => $body,
+			'html' => $html_body . '</body></html>',
+		);
+
 	}
+
+	private static function get_resized_content( $size = 'medium' ) {
+		$content = get_the_content();
+
+		$pattern = '/<img (.*?)src=["\'](.*?)["\'](.*?)>/i';
+
+
+		$callback = function( $matches ) use ( $size ) {
+			$full_image_url = $matches[2];
+
+			$attachment_id = attachment_url_to_postid( $full_image_url );
+
+			if ( $attachment_id ) {
+
+				$image_src = wp_get_attachment_image_src( $attachment_id, $size );
+
+				if ( $image_src ) {
+					$attributes = $matches[3];
+					$attributes = str_replace( 'size-full', 'size-' . $size, $attributes );
+					$attributes = preg_replace( '/width=".*?"/', 'width="' . $image_src[1] . '"', $attributes );
+					$attributes = preg_replace( '/height=".*?"/', 'height="' . $image_src[2] . '"', $attributes );
+
+					return '<img ' . $matches[1] . 'src="' . esc_url($image_src[0]) . '" ' . $attributes . '>';
+				}
+			}
+
+			return $matches[0];
+		};
+
+		$new_content = preg_replace_callback($pattern, $callback, $content);
+
+		return $new_content;
+	}
+
 
 	/**
 	 * Returns the subject line for the daily email.
@@ -319,20 +363,20 @@ class c2c_YearsAgoToday {
 	 * @param  string $body.   The email body.
 	 * @return string
 	 */
-	public static function add_user_email_footer( $user_id, $body ) {
-		$body .= "\n\n\n-------------------------------\n";
-		$body .= sprintf(
+	public static function add_user_email_footer( $user_id, $html_body ) {
+		$html_body .= "<br>\n<br>\n<hr>\n<p>";
+		$html_body .= sprintf(
 			__( 'You received this email because you have opted into receiving a daily email about posts published on this day in years past on the site %s, which is using the Years Ago Today plugin.', 'years-ago-today' ),
 			wp_specialchars_decode( get_option('blogname'), ENT_QUOTES )
 		);
-		$body .= "\n\n";
-		$body .= sprintf(
+		$html_body .= "</p>\n<p>";
+		$html_body .= sprintf(
 			__( 'If you wish to discontinue receiving these emails, simply log into the site and visit your profile at %s to uncheck the checkbox labeled "Email me daily about posts published on this day in years past."', 'years-ago-today' ),
 			get_edit_profile_url( $user_id )
 		);
-		$body .= "\n";
+		$html_body .= "</p>\n";
 
-		return $body;
+		return $html_body;
 	}
 
 	/**
@@ -358,11 +402,34 @@ class c2c_YearsAgoToday {
 		if ( ! $subject || ! $body ) {
 			return;
 		}
+		$headers = array();
+		if ( is_array( $body ) ) {
+			if ( isset( $body['html'] ) ) {
+				if ( isset( $body['text'] ) ) {
+					$plain_text = $body['text'];
+				} else {
+					$plain_text = wp_strip_all_tags( $body['html'] );
+				}
+
+				$headers[]    = 'Content-type: text/html';
+				$alt_function = function ( $mailer ) use ( $plain_text ) {
+					$mailer->{'AltBody'} = $plain_text;
+				};
+				add_action(
+					'phpmailer_init',
+					$alt_function
+				);
+
+				$body = $body['html'];
+			} elseif ( isset( $body['text'] ) ) {
+				$body = $body['text'];
+			}
+		}
 
 		// Send email to each user.
 		foreach ( $users as $user ) {
 			if ( $user->user_email ) {
-				wp_mail( $user->user_email, $subject, self::add_user_email_footer( $user->ID, $body ) );
+				wp_mail( $user->user_email, $subject, self::add_user_email_footer( $user->ID, $body ), $headers );
 			}
 		}
 	}
