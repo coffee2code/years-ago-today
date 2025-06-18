@@ -210,7 +210,7 @@ class c2c_YearsAgoToday {
 	 *
 	 * @since 1.2
 	 *
-	 * @return string
+	 * @return array
 	 */
 	public static function get_email_body() {
 		// Get the list of posts from years ago.
@@ -399,7 +399,7 @@ class c2c_YearsAgoToday {
 		$body    = self::get_email_body();
 
 		// If no subject or body for the email, then there's nothing else to do.
-		if ( ! $subject || ! $body ) {
+		if ( ! $subject || ! $body['text'] ) {
 			return;
 		}
 		$headers = array();
