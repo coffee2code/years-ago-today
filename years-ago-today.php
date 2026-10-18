@@ -64,6 +64,13 @@ class c2c_YearsAgoToday {
 	public static $meta_email_content_pref = 'c2c_years_ago_today_email_content';
 
 	/**
+	 * User meta key for embedding uploaded images in HTML emails.
+	 *
+	 * @var string
+	 */
+	public static $meta_email_embed_images = 'c2c_years_ago_today_email_embed_images';
+
+	/**
 	 * The default email content type.
 	 *
 	 * One of either 'list', 'excerpt', or 'full'. See `get_email_content_types()` for actual acceptable values.
@@ -354,12 +361,17 @@ class c2c_YearsAgoToday {
 	 * @param string $content_type The email content type. See `get_email_content_types()` for
 	 *                             acceptable values. Default 'list'.
 	 * @param bool   $include_footer Whether to include the footer in the email. Default true.
+	 * @param string $date Reference date in Y-m-d format. Default today.
 	 * @return array Associative array consisting of 'text' and 'html' keys with the plain-text
 	 *               and HTML email bodies, respectively.
 	 */
-	public static function get_email_body( $content_type = 'list', $include_footer = true ) {
+	public static function get_email_body( $content_type = 'list', $include_footer = true, $date = '' ) {
 		// Get the list of posts from years ago.
-		$query = self::get_posts();
+		$query = self::get_posts( false, $date );
+		$timestamp = '';
+		if ( $date ) {
+			$timestamp = strtotime( $date . ' 12:00:00 UTC' );
+		}
 
 		$site_name = html_entity_decode( wp_kses( get_option( 'blogname' ), array() ), ENT_QUOTES );
 
@@ -399,7 +411,7 @@ class c2c_YearsAgoToday {
 						__( 'No posts were published to the site %1$s on %2$s in any previous year.', 'years-ago-today' )
 					),
 					$site_name,
-					self::get_formatted_date_string()
+					self::get_formatted_date_string( $timestamp )
 				);
 				$html_body = wpautop( $body );
 			}
@@ -421,7 +433,7 @@ class c2c_YearsAgoToday {
 				),
 				$query->post_count,
 				$site_name,
-				self::get_formatted_date_string()
+				self::get_formatted_date_string( $timestamp )
 			);
 
 			$html_body = wpautop( esc_html( $body ) );
@@ -527,7 +539,7 @@ class c2c_YearsAgoToday {
 
 		if ( $html_body ) {
 			$html_body = self::get_html_email(
-				self::get_email_subject(),
+				self::get_email_subject( $date ),
 				$html_head . "\n\n" . $html_body,
 				$include_footer ? self::get_email_footer( 'html' ) : ''
 			);
@@ -589,6 +601,9 @@ class c2c_YearsAgoToday {
 		$size = self::get_html_email_image_size( $size );
 
 		$content = apply_filters( 'the_content', get_the_content() );
+		if ( '' === trim( $content ) ) {
+			return $content;
+		}
 
 		// Build a DOM document - tolerant mode prevents fatal errors on bad markup.
 		$dom = new DOMDocument();
@@ -721,14 +736,20 @@ class c2c_YearsAgoToday {
 	 *
 	 * @since 1.2
 	 *
+	 * @param string $date Reference date in Y-m-d format. Default today.
 	 * @return string
 	 */
-	public static function get_email_subject() {
+	public static function get_email_subject( $date = '' ) {
+		$timestamp = '';
+		if ( $date ) {
+			$timestamp = strtotime( $date . ' 12:00:00 UTC' );
+		}
+
 		return sprintf(
 			/* translators: 1: site name in subject for daily email, 2: date string for today */
 			__( '[%1$s] Years Ago Today - %2$s', 'years-ago-today' ),
 			html_entity_decode( wp_kses( get_option( 'blogname' ), array() ), ENT_QUOTES ),
-			self::get_formatted_date_string( '', true )
+			self::get_formatted_date_string( $timestamp, true )
 		);
 	}
 
@@ -855,9 +876,10 @@ class c2c_YearsAgoToday {
 	 * Returns an associative array of email content types and the email addresses
 	 * of users who have opted into emails of each content type.
 	 *
+	 * @param bool $group_by_image_pref Also separate recipients who prefer embedded images.
 	 * @return array
 	 */
-	public static function get_users_to_email_grouped_by_content_type() {
+	public static function get_users_to_email_grouped_by_content_type( $group_by_image_pref = false ) {
 		$users = self::get_users_to_email();
 
 		// Bail if no one has opted into getting an email.
@@ -870,6 +892,9 @@ class c2c_YearsAgoToday {
 		foreach ( $users as $user ) {
 			if ( is_email( $user->user_email ) ) {
 				$type = self::get_user_email_content_pref( $user->ID );
+				if ( $group_by_image_pref && get_user_option( self::$meta_email_embed_images, $user->ID ) ) {
+					$type .= ':embedded';
+				}
 				if ( ! isset( $emails[ $type ] ) ) {
 					$emails[ $type ] = array();
 				}
@@ -887,14 +912,15 @@ class c2c_YearsAgoToday {
 	 */
 	public static function cron_email() {
 		// Get list of users who want the daily email and bail if there aren't any.
-		$emails = self::get_users_to_email_grouped_by_content_type();
+		$emails = self::get_users_to_email_grouped_by_content_type( true );
 		if ( ! $emails ) {
 			return;
 		}
 
 		// Mail each email content type to its associated users.
 		foreach ( array_keys( $emails ) as $type ) {
-			self::send_email_of_type( $type, $emails[ $type ] );
+			$parts = explode( ':', $type );
+			self::send_email_of_type( $parts[0], $emails[ $type ], isset( $parts[1] ) );
 		}
 	}
 
@@ -907,9 +933,11 @@ class c2c_YearsAgoToday {
 	 *
 	 * @param string   $type   The email content type.
 	 * @param string[] $emails The already-verified email addresses that should be emailed for the content type.
-	 * @return int Count of the number of users emailed.
+	 * @param bool     $embed_images Embed images from this site's uploads. Default false.
+	 * @param string   $date Reference date in Y-m-d format. Default today.
+	 * @return int Number of recipients accepted by the mail transport.
 	 */
-	public static function send_email_of_type( $type, $emails ) {
+	public static function send_email_of_type( $type, $emails, $embed_images = false, $date = '' ) {
 		// Bail if no one to email.
 		if ( ! $emails ) {
 			return 0;
@@ -922,7 +950,7 @@ class c2c_YearsAgoToday {
 		);
 
 		// Get the subject of the email and bail if there isn't one.
-		$subject = self::get_email_subject();
+		$subject = self::get_email_subject( $date );
 		if ( ! $subject ) {
 			return 0;
 		}
@@ -931,7 +959,7 @@ class c2c_YearsAgoToday {
 		$batch_to_address = self::get_bcc_to_email_address();
 
 		// Get the email body parts and bail if there is no plaintext body (which can happen if there are no posts to email about).
-		$body  = self::get_email_body( $type );
+		$body  = self::get_email_body( $type, true, $date );
 		if ( ! $body['text'] ) {
 			return 0;
 		}
@@ -941,13 +969,23 @@ class c2c_YearsAgoToday {
 			? wpautop( esc_html( $plain ) )
 			: $body['html'];
 
-		$mailer_hook = static function ( $phpmailer ) use ( $html, $plain ) {
+		if ( $embed_images ) {
+			$embedded = self::get_embedded_email_images( $html );
+		} else {
+			$embedded = array( 'html' => $html, 'images' => array() );
+		}
+
+		$mailer_hook = static function ( $phpmailer ) use ( $embedded, $plain ) {
 			$phpmailer->isHTML( true );
-			$phpmailer->Body    = $html;
+			$phpmailer->Body    = $embedded['html'];
 			$phpmailer->AltBody = $plain;
+			foreach ( $embedded['images'] as $cid => $image ) {
+				$phpmailer->addEmbeddedImage( $image['path'], $cid, basename( $image['path'] ), 'base64', $image['mime'] );
+			}
 		};
 
 		// Chunk and send.
+		$sent = 0;
 		foreach ( array_chunk( $emails, $batch_size ) as $chunk ) {
 			$headers = $default_headers;
 
@@ -960,11 +998,67 @@ class c2c_YearsAgoToday {
 			}
 
 			add_action( 'phpmailer_init', $mailer_hook, 10, 1 );
-			wp_mail( $to_address, $subject, $html, $headers );
+			if ( wp_mail( $to_address, $subject, $html, $headers ) ) {
+				$sent += count( $chunk );
+			}
 			remove_action( 'phpmailer_init', $mailer_hook, 10 );
 		}
 
-		return count( $emails );
+		return $sent;
+	}
+
+	/**
+	 * Rewrites local upload image URLs as Content-ID references for email.
+	 * Unavailable files and external images retain their original URLs.
+	 *
+	 * @param string $html Email HTML.
+	 * @return array HTML and images keyed by Content-ID.
+	 */
+	private static function get_embedded_email_images( $html ) {
+		$uploads = wp_upload_dir();
+		$base_path = realpath( $uploads['basedir'] );
+		$base_url = trailingslashit( $uploads['baseurl'] );
+		$images = array();
+
+		if ( ! $base_path ) {
+			return array( 'html' => $html, 'images' => $images );
+		}
+
+		$html = preg_replace_callback( '/<img\b[^>]*>/i', static function ( $match ) use ( $base_url, $base_path, &$images ) {
+			$dom = new DOMDocument();
+			@$dom->loadHTML( '<?xml encoding="UTF-8">' . $match[0], LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD );
+			$img = $dom->getElementsByTagName( 'img' )->item( 0 );
+			if ( ! $img ) {
+				return $match[0];
+			}
+			$src = $img->getAttribute( 'src' );
+			if ( '//' === substr( $src, 0, 2 ) ) {
+				$src = wp_parse_url( $base_url, PHP_URL_SCHEME ) . ':' . $src;
+			}
+			if ( 0 !== strpos( $src, $base_url ) ) {
+				return $match[0];
+			}
+
+			$relative = rawurldecode( strtok( substr( $src, strlen( $base_url ) ), '?#' ) );
+			$path = realpath( $base_path . '/' . $relative );
+			if ( ! $path || 0 !== strpos( $path, $base_path . DIRECTORY_SEPARATOR ) || ! is_readable( $path ) ) {
+				return $match[0];
+			}
+			$info = @getimagesize( $path );
+			if ( ! $info || ! in_array( $info['mime'], array( 'image/jpeg', 'image/png', 'image/gif', 'image/webp' ), true ) ) {
+				return $match[0];
+			}
+
+			$cid = 'yat-' . md5( $path ) . '@yat';
+			$images[ $cid ] = array( 'path' => $path, 'mime' => $info['mime'] );
+			$img->setAttribute( 'src', 'cid:' . $cid );
+			$img->removeAttribute( 'srcset' );
+			$img->removeAttribute( 'sizes' );
+			$img->removeAttribute( 'loading' );
+			return $dom->saveHTML( $img );
+		}, $html );
+
+		return array( 'html' => $html, 'images' => $images );
 	}
 
 	/**
@@ -1376,27 +1470,35 @@ class c2c_YearsAgoToday {
 	}
 
 	/**
-	 * Generates and returns the cache key for today's post IDs.
+	 * Generates and returns the cache key for the reference date's post IDs.
 	 *
 	 * @since 2.0
 	 *
+	 * @param string $date Reference date in Y-m-d format. Default today.
 	 * @return string
 	 */
-	public static function get_post_ids_cache_key() {
-		// Unique per-site prefix + today's date.
-		return 'yat_' . get_current_blog_id() . '_' . wp_date( 'Ymd' );
+	public static function get_post_ids_cache_key( $date = '' ) {
+		// Unique per-site prefix and reference date.
+		if ( ! $date ) {
+			$date = wp_date( 'Y-m-d' );
+		}
+		return 'yat_' . get_current_blog_id() . '_' . str_replace( '-', '', $date );
 	}
 
 	/**
-	 * Returns the post IDs for posts published today.
+	 * Returns IDs of posts published on the reference day in previous years.
 	 *
 	 * @since 2.0
 	 *
+	 * @param string $date Reference date in Y-m-d format. Default today.
 	 * @return int[] Array of post IDs.
 	 */
-	public static function query_post_ids() {
+	public static function query_post_ids( $date = '' ) {
 		$first_year   = (int) self::get_first_published_year();
-		$current_year = (int) wp_date( 'Y' );
+		if ( ! $date ) {
+			$date = wp_date( 'Y-m-d' );
+		}
+		$current_year = (int) substr( $date, 0, 4 );
 
 		// Bail if this is the site's first year.
 		if ( $first_year >= $current_year ) {
@@ -1411,9 +1513,10 @@ class c2c_YearsAgoToday {
 			'post_type'      => self::get_post_types(),
 			'posts_per_page' => -1,
 			'date_query'     => array(
+				'compare' => 'IN',
 				'year'  => $years,
-				'month' => wp_date( 'm' ),
-				'day'   => wp_date( 'd' ),
+				'month' => substr( $date, 5, 2 ),
+				'day'   => substr( $date, 8, 2 ),
 			),
 		) );
 
@@ -1429,12 +1532,13 @@ class c2c_YearsAgoToday {
 	 * @param bool $return_posts Return array of queried posts or the WP_Query
 	 *                           object? True to return array posts, false to
 	 *                           return WP_Query object. Default false.
+	 * @param string $date Reference date in Y-m-d format. Default today.
 	 * @return array|WP_Query    Array if return_posts is true, WP_Query if false.
 	 */
-	public static function get_posts( $return_posts = false ) {
-		if ( false === ( $ids = get_transient( self::get_post_ids_cache_key() ) ) ) {
-			$ids = self::query_post_ids();
-			set_transient( self::get_post_ids_cache_key(), $ids, 15 * MINUTE_IN_SECONDS );
+	public static function get_posts( $return_posts = false, $date = '' ) {
+		if ( false === ( $ids = get_transient( self::get_post_ids_cache_key( $date ) ) ) ) {
+			$ids = self::query_post_ids( $date );
+			set_transient( self::get_post_ids_cache_key( $date ), $ids, 15 * MINUTE_IN_SECONDS );
 		}
 
 		// Bail early if there are no posts.
@@ -1594,6 +1698,14 @@ class c2c_YearsAgoToday {
 			);
 		}
 
+		printf(
+			'<p><label><input type="checkbox" name="%1$s" value="1"%2$s> %3$s</label><br><span class="description">%4$s</span></p>',
+			esc_attr( self::$meta_email_embed_images ),
+			checked( (bool) get_user_option( self::$meta_email_embed_images, $user->ID ), true, false ),
+			esc_html__( 'Embed images in HTML emails', 'years-ago-today' ),
+			esc_html__( 'Include photos uploaded to this site in the email so they can display without downloading remote images. This increases the email size. External images still load remotely.', 'years-ago-today' )
+		);
+
 		echo "\t\t\t\t</fieldset>\n";
 
 		echo "\t\t\t</td>\n";
@@ -1608,7 +1720,7 @@ class c2c_YearsAgoToday {
 	 * @since 1.0
 	 *
 	 * @param  int  $user_id The user ID.
-	 * @return bool          True if the option saved successfully.
+	 * @return void|false False if the current user cannot edit this user.
 	 */
 	public static function option_save( $user_id ) {
 		if ( ! current_user_can( 'edit_user', $user_id ) ) {
@@ -1616,13 +1728,10 @@ class c2c_YearsAgoToday {
 		}
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Core already verifies nonces, but also the value is only used for a comparison.
-		if ( isset( $_POST[ self::$option_name ] ) ) {
-			// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Core already verifies nonces, but also the value is only used for a comparison.
-			$value = sanitize_text_field( wp_unslash( $_POST[ self::$option_name ] ) );
-
-			if ( self::$enabled_option_value === $value ) {
-				return update_user_option( $user_id, self::$option_name, self::$enabled_option_value );
-			}
+		if ( isset( $_POST[ self::$option_name ] ) && self::$enabled_option_value === sanitize_text_field( wp_unslash( $_POST[ self::$option_name ] ) ) ) {
+			update_user_option( $user_id, self::$option_name, self::$enabled_option_value );
+		} else {
+			delete_user_option( $user_id, self::$option_name );
 		}
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Core already verifies nonces, but also the value is only used for a comparison.
@@ -1634,7 +1743,12 @@ class c2c_YearsAgoToday {
 			}
 		}
 
-		return delete_user_option( $user_id, self::$option_name );
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Core already verifies profile nonces.
+		if ( isset( $_POST[ self::$meta_email_embed_images ] ) && '1' === wp_unslash( $_POST[ self::$meta_email_embed_images ] ) ) {
+			update_user_option( $user_id, self::$meta_email_embed_images, 1 );
+		} else {
+			delete_user_option( $user_id, self::$meta_email_embed_images );
+		}
 	}
 
 	/**
@@ -1657,6 +1771,103 @@ class c2c_YearsAgoToday {
 		}
 
 		return $pref ?: self::$email_content_default;
+	}
+
+	/**
+	 * Returns dates in a year with published posts from previous years.
+	 *
+	 * @param int $year Reference year.
+	 * @return string[] Sorted dates in Y-m-d format.
+	 */
+	private static function get_available_email_dates( $year ) {
+		global $wpdb;
+		$first_year = (int) self::get_first_published_year();
+		if ( $year <= $first_year ) {
+			return array();
+		}
+		$post_types = self::get_post_types();
+		$placeholders = implode( ',', array_fill( 0, count( $post_types ), '%s' ) );
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		$days = $wpdb->get_col( $wpdb->prepare(
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Only placeholder tokens are interpolated.
+			"SELECT DISTINCT DATE_FORMAT(post_date, '%%m-%%d') FROM {$wpdb->posts} WHERE post_status = 'publish' AND post_type IN ($placeholders) AND post_date >= %s AND post_date < %s ORDER BY 1",
+			array_merge( $post_types, array( sprintf( '%04d-01-01 00:00:00', $first_year ), sprintf( '%04d-01-01 00:00:00', $year ) ) )
+		) );
+		$dates = array();
+		foreach ( $days as $day ) {
+			if ( checkdate( (int) substr( $day, 0, 2 ), (int) substr( $day, 3, 2 ), $year ) ) {
+				$dates[] = sprintf( '%04d-%s', $year, $day );
+			}
+		}
+		return $dates;
+	}
+
+	/**
+	 * Selects today, or the next anniversary with posts when today has none.
+	 *
+	 * @param string $date Requested preview date. Invalid or absent dates use the fallback.
+	 * @return string Preview date in Y-m-d format.
+	 */
+	private static function get_email_preview_date( $date = '' ) {
+		if ( is_string( $date ) && preg_match( '/^([0-9]{4})-([0-9]{2})-([0-9]{2})$/', $date, $parts ) && checkdate( (int) $parts[2], (int) $parts[3], (int) $parts[1] ) ) {
+			return $date;
+		}
+		$today = wp_date( 'Y-m-d' );
+		if ( self::get_posts()->have_posts() ) {
+			return $today;
+		}
+		$dates = self::get_available_email_dates( (int) substr( $today, 0, 4 ) );
+		foreach ( $dates as $date ) {
+			if ( $date > $today ) {
+				return $date;
+			}
+		}
+		if ( $dates ) {
+			return $dates[0];
+		}
+		$adjacent = self::get_adjacent_email_dates( $today );
+		if ( $adjacent['next'] ) {
+			return $adjacent['next'];
+		}
+		if ( $adjacent['previous'] ) {
+			return $adjacent['previous'];
+		}
+		return $today;
+	}
+
+	/**
+	 * Finds the adjacent dates that have posts from previous years.
+	 *
+	 * @param string $date Preview date in Y-m-d format.
+	 * @return array Previous and next dates, or empty strings when unavailable.
+	 */
+	private static function get_adjacent_email_dates( $date ) {
+		$year = (int) substr( $date, 0, 4 );
+		$next_year = max( $year, (int) self::get_first_published_year() );
+		$previous = $next = '';
+		foreach ( self::get_available_email_dates( $year ) as $candidate ) {
+			if ( $candidate < $date ) {
+				$previous = $candidate;
+			} elseif ( $candidate > $date && ! $next ) {
+				$next = $candidate;
+			}
+		}
+		// Four years covers leap-day-only sites without scanning every day.
+		for ( $offset = 1; $offset <= 4 && ( ! $previous || ! $next ); ++$offset ) {
+			if ( ! $previous && $year - $offset > 0 ) {
+				$dates = self::get_available_email_dates( $year - $offset );
+				if ( $dates ) {
+					$previous = end( $dates );
+				}
+			}
+			if ( ! $next && $next_year + $offset <= 9999 ) {
+				$dates = self::get_available_email_dates( $next_year + $offset );
+				if ( $dates ) {
+					$next = $dates[0];
+				}
+			}
+		}
+		return array( 'previous' => $previous, 'next' => $next );
 	}
 
 	/**
@@ -1699,61 +1910,166 @@ class c2c_YearsAgoToday {
 			add_filter( 'c2c_years_ago_today-email-if-no-posts', '__return_true' );
 		}
 
-		// Styles.
+		$preview_args = array( $query_key => '1', 'content-type' => $content_type, 'type' => $type );
+		if ( $force ) {
+			$preview_args['force'] = '1';
+		}
+
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Date only controls the preview, not a write.
+		$requested_date = '';
+		if ( isset( $_GET['date'] ) ) {
+			$requested_date = wp_unslash( $_GET['date'] );
+		}
+		$date = self::get_email_preview_date( $requested_date );
+		$message = '';
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Only displays the result of a completed send.
+		$result = $_GET['test-result'] ?? '';
+
+		if ( 'POST' === ( $_SERVER['REQUEST_METHOD'] ?? '' ) && isset( $_POST['send-years-ago-today-test'] ) ) {
+			check_admin_referer( 'send-years-ago-today-test' );
+			// Send only to the logged-in user; no recipient can be supplied in the request.
+			$user = wp_get_current_user();
+			$sent = self::send_email_of_type( $content_type, array( $user->user_email ), (bool) get_user_option( self::$meta_email_embed_images, $user->ID ), $date );
+			if ( $sent ) {
+				$result = 'sent';
+			} else {
+				$result = 'failed';
+			}
+
+			if ( ! defined( 'WP_RUNNING_TESTS' ) || ! WP_RUNNING_TESTS ) {
+				wp_safe_redirect( add_query_arg( array_merge( $preview_args, array(
+					'date' => $date,
+					'test-result' => $result,
+				) ), admin_url( 'profile.php' ) ) );
+				exit;
+			}
+		}
+		if ( 'sent' === $result ) {
+			$message = __( 'Test email sent to your email address.', 'years-ago-today' );
+		} elseif ( 'failed' === $result ) {
+			$message = __( 'The test email could not be sent.', 'years-ago-today' );
+		}
+
+		// Use WordPress admin controls in this standalone preview.
+		echo '<!DOCTYPE html><html lang="' . esc_attr( get_bloginfo( 'language' ) ) . '"><head>';
+		echo '<meta charset="' . esc_attr( get_bloginfo( 'charset' ) ) . '"><meta name="viewport" content="width=device-width, initial-scale=1">';
+		echo '<title>' . esc_html__( 'Email preview — Years Ago Today', 'years-ago-today' ) . '</title>';
+		wp_admin_css( 'common', true );
+		wp_admin_css( 'forms', true );
+		wp_admin_css( 'buttons', true );
 		echo '<style>
-			body {
-				background-color: #fbfbfb;
+			body { margin: 0; padding: 32px 16px; background: #f0f0f1; color: #1d2327; }
+			.yat-preview-toolbar { max-width: 650px; margin: 0 auto 24px; padding: 24px; background: #fff; border: 1px solid #c3c4c7; box-sizing: border-box; }
+			.yat-preview-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 12px; }
+			.yat-preview-heading h1 { margin: 0; font-size: 23px; line-height: 1.3; font-weight: 400; }
+			.yat-preview-toolbar p.header { margin: 0; color: #646970; }
+			.yat-preview-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin: 20px 0 10px; }
+			.yat-preview-actions form { margin: 0; }
+			.yat-preview-date-controls { display: flex; align-items: center; gap: 6px; }
+			.yat-preview-date-controls input[type=date] { min-height: 40px; margin: 0; min-width: 0; max-width: 160px; }
+			.yat-preview-date-controls .yat-preview-arrow { display: inline-flex; align-items: center; justify-content: center; min-width: 32px; padding: 0; font-size: 22px; line-height: 30px; }
+			.yat-preview-toolbar .yat-preview-help { margin: 0; font-size: 12px; color: #646970; }
+			.yat-preview-toolbar p.yat-preview-subject { margin-top: 20px; padding-top: 16px; border-top: 1px solid #dcdcde; color: #1d2327; overflow-wrap: anywhere; }
+			.yat-preview-toolbar .notice { margin: 0 0 16px; }
+			.yat-preview-message { max-width: 650px; margin: 0 auto; font-family: Arial, sans-serif; font-size: 16px; }
+			.yat-preview-message p { font-size: inherit; }
+			.yat-preview-message .text-container { white-space: pre-wrap; overflow-wrap: anywhere; margin: 20px 0; background: #fff; border: 1px solid #c3c4c7; padding: 24px; }
+			.yat-preview-footer { max-width: 650px; margin: 24px auto 0; text-align: center; color: #646970; }
+			.yat-preview-footer p { margin: 8px 0; }
+			@media (max-width: 540px) {
+				body { padding: 16px 12px; }
+				.yat-preview-toolbar { padding: 16px; }
+				.yat-preview-heading { align-items: flex-start; }
+				.yat-preview-heading h1 { font-size: 20px; }
+				.yat-preview-actions { align-items: stretch; }
+				.yat-preview-actions form { width: 100%; }
+				.yat-preview-send .button { width: 100%; }
+				.yat-preview-date-controls input[type=date] { flex: 1; width: 0; max-width: none; }
 			}
-			p {
-				max-width: 600px;
-				margin: 30px auto;
+		</style></head><body>';
+		echo '<section class="wp-core-ui yat-preview-toolbar" aria-label="' . esc_attr__( 'Email preview controls', 'years-ago-today' ) . '">';
+		echo '<div class="yat-preview-heading"><h1>' . esc_html__( 'Email preview', 'years-ago-today' ) . '</h1>';
+		echo '<a href="' . esc_url( admin_url( 'profile.php' ) ) . '">' . esc_html__( 'Return to profile', 'years-ago-today' ) . '</a></div>';
+
+		if ( $message ) {
+			$notice_class = 'notice-success';
+			if ( 'failed' === $result ) {
+				$notice_class = 'notice-error';
 			}
-			p.text-container {
-				white-space: pre-wrap;
-				background-color: #fff;
-				border: 1px solid #eee;
-				border-radius: 6px;
-				padding: 32px 24px;
-			}
-			p.header {
-				font-style: italic;
-			}
-			p.header, p.footer {
-				text-align: center;
-			}
-			p.footer {
-				margin-top: 50px;
-			}
-		</style>';
+			echo '<div class="notice ' . esc_attr( $notice_class ) . '" role="status"><p>' . esc_html( $message ) . '</p></div>';
+		}
+		if ( ! $requested_date && $date !== wp_date( 'Y-m-d' ) ) {
+			echo '<div class="notice notice-info"><p>' . esc_html__( 'Today has no posts from previous years. Showing another date with posts.', 'years-ago-today' ) . '</p></div>';
+		}
 
 		// Provide context for the email preview.
+		$format = __( 'HTML', 'years-ago-today' );
+		if ( 'text' === $type ) {
+			$format = __( 'plain text', 'years-ago-today' );
+		}
+		$content_notice = '';
+		if ( 'list' !== $content_type ) {
+			$content_description = __( 'full content', 'years-ago-today' );
+			if ( 'excerpt' === $content_type ) {
+				$content_description = __( 'excerpts', 'years-ago-today' );
+			}
+			$content_notice = sprintf(
+				/* translators: %s: type of content (excerpts or full content) */
+				__( 'The email includes %s of each post.', 'years-ago-today' ),
+				$content_description
+			);
+		}
 		echo '<p class="header">';
 		echo esc_html( sprintf(
 			/* translators: 1: type of email (plain text or HTML), 2: sentence describing content type (if excerpt or full) */
 			__( 'This is a preview of the %1$s version of the Years Ago Today email. %2$s', 'years-ago-today' ),
-			( $type === 'text' ? __( 'plain text', 'years-ago-today' ) : __( 'HTML', 'years-ago-today' ) ),
-			( $content_type !== 'list' ? sprintf(
-				/* translators: %s: type of content (excerpts or full content) */
-				__( 'The email includes %s of each post.', 'years-ago-today' ),
-				( $content_type === 'excerpt' ? __( 'excerpts', 'years-ago-today' ) : __( 'full content', 'years-ago-today' ) )
-			) : '' )
+			$format,
+			$content_notice
 		) );
 		echo '</p>';
 
+		$navigation = self::get_adjacent_email_dates( $date );
+
+		echo '<div class="yat-preview-actions"><form method="get" action="' . esc_url( admin_url( 'profile.php' ) ) . '"><div class="yat-preview-date-controls">';
+		foreach ( $preview_args as $name => $value ) {
+			echo '<input type="hidden" name="' . esc_attr( $name ) . '" value="' . esc_attr( $value ) . '">';
+		}
+		if ( $navigation['previous'] ) {
+			echo '<a class="button button-secondary yat-preview-arrow" aria-label="' . esc_attr__( 'Previous date with posts', 'years-ago-today' ) . '" href="' . esc_url( add_query_arg( array_merge( $preview_args, array( 'date' => $navigation['previous'] ) ), admin_url( 'profile.php' ) ) ) . '">&lsaquo;</a> ';
+		} else {
+			echo '<span class="button disabled yat-preview-arrow" aria-hidden="true">&lsaquo;</span>';
+		}
+		echo '<input type="date" name="date" value="' . esc_attr( $date ) . '" aria-label="' . esc_attr__( 'Preview date', 'years-ago-today' ) . '"> ';
+		if ( $navigation['next'] ) {
+			echo '<a class="button button-secondary yat-preview-arrow" aria-label="' . esc_attr__( 'Next date with posts', 'years-ago-today' ) . '" href="' . esc_url( add_query_arg( array_merge( $preview_args, array( 'date' => $navigation['next'] ) ), admin_url( 'profile.php' ) ) ) . '">&rsaquo;</a>';
+		} else {
+			echo '<span class="button disabled yat-preview-arrow" aria-hidden="true">&rsaquo;</span>';
+		}
+		echo '<button class="button button-secondary" type="submit">' . esc_html__( 'Show date', 'years-ago-today' ) . '</button> ';
+		echo '</div></form>';
+
+		echo '<form class="yat-preview-send" method="post" action="' . esc_url( add_query_arg( array_merge( $preview_args, array( 'date' => $date ) ), admin_url( 'profile.php' ) ) ) . '">';
+		wp_nonce_field( 'send-years-ago-today-test' );
+		echo '<button class="button button-primary" type="submit" name="send-years-ago-today-test" value="1">' . esc_html__( 'Send test email to me', 'years-ago-today' ) . '</button>';
+		echo '</form></div>';
+		echo '<p class="yat-preview-help">' . esc_html__( 'Uses the previewed content style and your saved image preference.', 'years-ago-today' ) . '</p>';
+
 		// Get the email body.
-		$body = self::get_email_body( $content_type )[ $type ];
+		$body = self::get_email_body( $content_type, true, $date )[ $type ];
 		if ( 'text' === $type ) {
 			$body = '<p class="text-container">' . $body . '</p>';
 		}
 
-		echo '<p class="header"><strong>' . esc_html__( 'Subject:', 'years-ago-today' ) . '</strong> ' . esc_html( self::get_email_subject() ) . '</p>';
+		echo '<p class="header yat-preview-subject"><strong>' . esc_html__( 'Subject:', 'years-ago-today' ) . '</strong> ' . esc_html( self::get_email_subject( $date ) ) . '</p>';
 
+		echo '</section><main class="yat-preview-message">';
 		if ( $body ) {
 			echo wp_kses_post( $body );
 		} else {
 			echo "<p><em>" . esc_html__( 'No posts found for today. No email would be sent.', 'years-ago-today' ) . "</em></p>";
 		}
 
+		echo '</main><footer class="yat-preview-footer">';
 		echo '<p class="header">';
 		esc_html_e( 'Note that there may be differences in how the email is displayed by different email clients.', 'years-ago-today' );
 		echo '</p>';
@@ -1763,6 +2079,8 @@ class c2c_YearsAgoToday {
 			esc_url( admin_url( 'profile.php' ) ),
 			esc_html__( 'Return to profile', 'years-ago-today' )
 		);
+
+		echo '</footer></body></html>';
 
 		if ( defined( 'WP_RUNNING_TESTS' ) && WP_RUNNING_TESTS ) {
 			return;

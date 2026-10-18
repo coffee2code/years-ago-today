@@ -125,6 +125,20 @@ class Test_Years_Ago_Today_Resized_Content extends WP_UnitTestCase {
 	//
 
 
+	public function test_empty_content_does_not_throw() {
+		$this->assertSame( '', $this->run_helper_on( '' ) );
+	}
+
+	public function test_content_filtered_to_empty_does_not_throw() {
+		$empty_content = static function () { return ''; };
+		add_filter( 'the_content', $empty_content, PHP_INT_MAX );
+		try {
+			$this->assertSame( '', $this->run_helper_on( '<p>Content removed by a filter.</p>' ) );
+		} finally {
+			remove_filter( 'the_content', $empty_content, PHP_INT_MAX );
+		}
+	}
+
 	public function test_inserts_alt_when_missing() {
 		$html = sprintf(
 			'<img src="%s" />',

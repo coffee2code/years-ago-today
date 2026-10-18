@@ -245,6 +245,30 @@ class Test_Years_Ago_Today_Cron_Email extends WP_UnitTestCase {
 		$this->assertEquals( 3, c2c_YearsAgoToday::send_email_of_type( 'list', [ 'text1@example.org', 'text2@example.org', 'text3@example.org' ] ) );
 	}
 
+
+	public function test_send_email_of_type__failed_transport_returns_zero() {
+		$blocked = static function () { return false; };
+		add_filter( 'pre_wp_mail', $blocked, 20 );
+		try {
+			$this->assertSame( 0, c2c_YearsAgoToday::send_email_of_type( 'list', array( 'text@example.org' ) ) );
+		} finally {
+			remove_filter( 'pre_wp_mail', $blocked, 20 );
+		}
+	}
+
+	public function test_send_email_of_type__counts_only_successful_batches() {
+		$batch_size = static function () { return 1; };
+		$transport = static function ( $result, $args ) { return 'text2@example.org' !== $args['to']; };
+		add_filter( 'c2c_years_ago_today-batch_size', $batch_size );
+		add_filter( 'pre_wp_mail', $transport, 20, 2 );
+		try {
+			$this->assertSame( 2, c2c_YearsAgoToday::send_email_of_type( 'list', array( 'text1@example.org', 'text2@example.org', 'text3@example.org' ) ) );
+		} finally {
+			remove_filter( 'c2c_years_ago_today-batch_size', $batch_size );
+			remove_filter( 'pre_wp_mail', $transport, 20 );
+		}
+	}
+
 	public function test_send_email_of_type__when_invalid_email_content_type() {
 		$this->assertEquals( 1, c2c_YearsAgoToday::send_email_of_type( 'invalid', [ 'text@example.org' ] ) );
 	}

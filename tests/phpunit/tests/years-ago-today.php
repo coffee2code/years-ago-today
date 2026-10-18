@@ -1616,6 +1616,37 @@ HTML;
 	}
 
 	/*
+	 * option_save()
+	 */
+
+	public function test_option_save__saves_content_preference_when_opted_in() {
+		$user_id = $this->factory->user->create( array( 'role' => 'administrator' ) );
+		$original_user_id = get_current_user_id();
+		$original_post = $_POST;
+		wp_set_current_user( $user_id );
+
+		try {
+			$_POST[ c2c_YearsAgoToday::$option_name ] = c2c_YearsAgoToday::$enabled_option_value;
+
+			// Test both initial opt-in and changing preferences while already opted in.
+			foreach ( array( 'full', 'excerpt', 'list' ) as $preference ) {
+				$_POST[ c2c_YearsAgoToday::$meta_email_content_pref ] = $preference;
+				c2c_YearsAgoToday::option_save( $user_id );
+
+				$this->assertSame( $preference, get_user_option( c2c_YearsAgoToday::$meta_email_content_pref, $user_id ) );
+				$this->assertSame( c2c_YearsAgoToday::$enabled_option_value, get_user_option( c2c_YearsAgoToday::$option_name, $user_id ) );
+			}
+
+			unset( $_POST[ c2c_YearsAgoToday::$option_name ] );
+			c2c_YearsAgoToday::option_save( $user_id );
+			$this->assertFalse( get_user_option( c2c_YearsAgoToday::$option_name, $user_id ) );
+		} finally {
+			$_POST = $original_post;
+			wp_set_current_user( $original_user_id );
+		}
+	}
+
+	/*
 	 * get_user_email_content_pref()
 	 */
 
